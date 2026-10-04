@@ -4,33 +4,134 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Accounts Dod • Stock Manager</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f6fa;color:#182033}
-header{background:#182033;color:#fff;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-main{max-width:1100px;margin:auto;padding:15px}
-.card,.item{background:#fff;border:1px solid #e2e7ef;border-radius:14px;padding:14px;margin:10px 0}
-button,input,select{font:inherit;padding:10px;border:1px solid #d8dee8;border-radius:9px;background:#fff}
-button{font-weight:700;cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
-.primary{background:#2563eb;color:#fff;border-color:#2563eb}
-.green{background:#e9f8f0;border-color:#9ed8b9}
-.red{background:#fff0f0;border-color:#efaaaa}
-.danger{background:#fee2e2;color:#991b1b;border-color:#fecaca}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.stat b{display:block;font-size:22px}
-.toolbar,.actions{display:flex;gap:8px;flex-wrap:wrap}
-.toolbar input{flex:1;min-width:220px}
-.row{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.qty{font-size:22px;font-weight:800}
-.muted{color:#687386;font-size:12px}
-.form{display:grid;gap:10px}
-.form input,.form select{width:100%}
-.item .actions{justify-content:flex-end}
 
-#loginScreen,#resetScreen{
+body{
+margin:0;
+font-family:system-ui,-apple-system,Segoe UI,sans-serif;
+background:#f4f6fa;
+color:#182033
+}
+
+header{
+background:#182033;
+color:white;
+padding:16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px
+}
+
+main{
+max-width:1100px;
+margin:auto;
+padding:15px
+}
+
+.card,.item{
+background:white;
+border:1px solid #e2e7ef;
+border-radius:14px;
+padding:14px;
+margin:10px 0
+}
+
+button,input{
+font:inherit;
+padding:10px;
+border:1px solid #d8dee8;
+border-radius:9px;
+background:white
+}
+
+button{
+font-weight:700;
+cursor:pointer
+}
+
+.primary{
+background:#2563eb;
+color:white;
+border-color:#2563eb
+}
+
+.green{
+background:#e9f8f0;
+border-color:#9ed8b9
+}
+
+.red{
+background:#fff0f0;
+border-color:#efaaaa
+}
+
+.danger{
+background:#fee2e2;
+color:#991b1b
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px
+}
+
+.stat b{
+display:block;
+font-size:22px
+}
+
+.toolbar,.actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+.toolbar input{
+flex:1;
+min-width:220px
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+gap:10px;
+align-items:center
+}
+
+.qty{
+font-size:22px;
+font-weight:800
+}
+
+.muted{
+color:#687386;
+font-size:12px
+}
+
+.error{
+color:#c62828;
+font-size:13px;
+min-height:20px
+}
+
+.success{
+color:#18804b;
+font-size:13px;
+min-height:20px
+}
+
+#app{
+display:none
+}
+
+#loginScreen,
+#resetScreen{
 position:fixed;
 inset:0;
 background:#f4f6fa;
@@ -42,7 +143,7 @@ z-index:9999
 }
 
 .loginbox{
-background:#fff;
+background:white;
 width:min(430px,100%);
 padding:28px;
 border-radius:18px;
@@ -59,37 +160,29 @@ width:100%;
 margin-top:7px
 }
 
-.error{
-color:#c62828;
-font-size:13px;
-min-height:18px
-}
-
-.success{
-color:#18794e;
-font-size:13px;
-min-height:18px
-}
-
-#app{display:none}
-
-.badge{
-display:inline-block;
-padding:4px 8px;
-border-radius:999px;
-background:#eef2ff;
-font-size:12px
-}
-
 dialog{
 border:0;
 border-radius:15px;
-width:min(520px,92vw);
+width:min(550px,92vw);
 padding:0
 }
 
-dialog::backdrop{background:#0008}
-.modal{padding:18px}
+dialog::backdrop{
+background:#0008
+}
+
+.modal{
+padding:18px
+}
+
+.form{
+display:grid;
+gap:10px
+}
+
+.form input{
+width:100%
+}
 
 table{
 width:100%;
@@ -98,25 +191,43 @@ border-collapse:collapse
 
 th,td{
 padding:8px;
-border-bottom:1px solid #edf0f4;
+border-bottom:1px solid #eee;
 text-align:left;
-font-size:14px
+font-size:13px
 }
 
-.right{text-align:right}
+.badge{
+display:inline-block;
+padding:4px 8px;
+border-radius:20px;
+background:#eef2ff;
+font-size:12px
+}
 
 @media(max-width:700px){
-.stats{grid-template-columns:1fr 1fr}
-header{align-items:flex-start}
-.row{align-items:flex-start;flex-direction:column}
-.item .actions{justify-content:flex-start}
+
+.stats{
+grid-template-columns:1fr 1fr
+}
+
+header{
+align-items:flex-start
+}
+
+.row{
+align-items:flex-start;
+flex-direction:column
+}
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+
+<!-- LOGIN SCREEN -->
+
 <div id="loginScreen">
 
 <div class="loginbox">
@@ -150,14 +261,16 @@ required
 
 <div id="loginError" class="error"></div>
 
-<button class="primary" type="submit">
+<button
+class="primary"
+type="submit"
+>
 Login
 </button>
 
 <button
 type="button"
-id="forgotPasswordBtn"
-onclick="forgotPassword(); return false;"
+onclick="forgotPassword()"
 >
 Forgot Password
 </button>
@@ -165,61 +278,78 @@ Forgot Password
 </form>
 
 </div>
+
 </div>
 
 
-<!-- PASSWORD RESET -->
-<div id="resetScreen" style="display:none">
+<!-- PASSWORD RESET SCREEN -->
+
+<div
+id="resetScreen"
+style="display:none"
+>
 
 <div class="loginbox">
 
 <h2>🔑 Set New Password</h2>
 
 <p class="muted">
-Create a new password for your Accounts Dod login.
+Create a new password for your Accounts Dod account.
 </p>
 
 <form id="resetForm">
 
-<label>New password</label>
+<label>New Password</label>
 
 <input
 id="newPassword"
 type="password"
 minlength="6"
-autocomplete="new-password"
 required
 >
 
-<label>Confirm password</label>
+<label>Confirm Password</label>
 
 <input
 id="confirmPassword"
 type="password"
 minlength="6"
-autocomplete="new-password"
 required
 >
 
-<div id="resetError" class="error"></div>
+<div
+id="resetError"
+class="error"
+></div>
 
-<div id="resetSuccess" class="success"></div>
+<div
+id="resetSuccess"
+class="success"
+></div>
 
-<button class="primary" type="submit">
+<button
+class="primary"
+type="submit"
+>
 Update Password
 </button>
 
-<button type="button" onclick="showLogin()">
+<button
+type="button"
+onclick="showLogin()"
+>
 Back to Login
 </button>
 
 </form>
 
 </div>
+
 </div>
 
 
-<!-- APP -->
+<!-- MAIN APP -->
+
 <div id="app">
 
 <header>
@@ -248,7 +378,9 @@ File-Sync Edition • Accounts Dod
 
 <main>
 
-<!-- STORAGE -->
+
+<!-- DATA STORAGE -->
+
 <div class="card">
 
 <b>📁 Data Storage</b>
@@ -275,20 +407,21 @@ Select Data Folder
 </button>
 
 <button onclick="restoreBackup()">
-♻️ Restore JSON
+♻️ Restore
 </button>
 
 </div>
 
 <p class="muted">
-Recommended: select a folder inside your Google Drive,
-Dropbox or OneDrive synced folder on Windows.
+On Windows Chrome or Edge, select a folder inside Google Drive,
+Dropbox or OneDrive for automatic file syncing.
 </p>
 
 </div>
 
 
-<!-- STATS -->
+<!-- STATISTICS -->
+
 <div class="stats">
 
 <div class="card stat">
@@ -314,7 +447,8 @@ Dropbox or OneDrive synced folder on Windows.
 </div>
 
 
-<!-- SEARCH / BUTTONS -->
+<!-- SEARCH -->
+
 <div class="card">
 
 <div class="toolbar">
@@ -337,7 +471,7 @@ onclick="openAdd()"
 </button>
 
 <button onclick="downloadBackup()">
-⬇️ Download Backup
+⬇️ Backup
 </button>
 
 </div>
@@ -347,12 +481,14 @@ onclick="openAdd()"
 
 <div id="items"></div>
 
+
 </main>
 
 </div>
 
 
 <!-- ADD / EDIT ITEM -->
+
 <dialog id="itemDialog">
 
 <div class="modal">
@@ -372,7 +508,7 @@ type="hidden"
 >
 
 <label>
-Product / Item name
+Product / Item Name
 
 <input
 id="itemName"
@@ -381,9 +517,8 @@ required
 
 </label>
 
-
 <label>
-Rate per unit
+Rate Per Unit
 
 <input
 id="itemRate"
@@ -395,9 +530,8 @@ required
 
 </label>
 
-
 <label>
-Opening quantity
+Quantity
 
 <input
 id="itemQty"
@@ -409,12 +543,10 @@ required
 
 </label>
 
-
 <div
 id="itemError"
 class="error"
 ></div>
-
 
 <div class="actions">
 
@@ -442,6 +574,7 @@ Save Item
 
 
 <!-- STOCK MOVEMENT -->
+
 <dialog id="stockDialog">
 
 <div class="modal">
@@ -467,5 +600,1557 @@ type="hidden"
 
 <div id="stockInfo"></div>
 
+<label>
+Quantity
+
+<input
+id="stockQty"
+type="number"
+min="0.01"
+step="0.01"
+required
+>
+
+</label>
 
 <label>
+Note / Customer
+
+<input id="stockNote">
+</label>
+
+<div
+id="stockError"
+class="error"
+></div>
+
+<div class="actions">
+
+<button
+type="button"
+onclick="stockDialog.close()"
+>
+Cancel
+</button>
+
+<button
+class="primary"
+type="submit"
+>
+Save Movement
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</dialog>
+
+
+<!-- HISTORY -->
+
+<dialog id="historyDialog">
+
+<div class="modal">
+
+<div class="row">
+
+<h3>
+📜 Movement History
+</h3>
+
+<button
+onclick="historyDialog.close()"
+>
+✕
+</button>
+
+</div>
+
+<div id="historyBody"></div>
+
+</div>
+
+</dialog>
+
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+"https://dlsxwygoylngvtcvnxtr.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_fnwe7FjrJMf3egYJ9hoX3A_KJh1spEj";
+
+const auth =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let db = {
+items:[],
+movements:[],
+updatedAt:null
+};
+
+let dir = null;
+
+let recoveryMode = false;
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function $(id){
+return document.getElementById(id);
+}
+
+function now(){
+return new Date().toISOString();
+}
+
+function money(n){
+
+return "₹" +
+Number(n || 0).toLocaleString(
+"en-IN",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+}
+
+
+/* =========================
+   LOGIN SCREEN
+========================= */
+
+function showLogin(){
+
+$("loginScreen").style.display="flex";
+
+$("resetScreen").style.display="none";
+
+$("app").style.display="none";
+
+recoveryMode=false;
+
+}
+
+
+function showReset(){
+
+$("loginScreen").style.display="none";
+
+$("resetScreen").style.display="flex";
+
+$("app").style.display="none";
+
+recoveryMode=true;
+
+}
+
+
+function showApp(){
+
+$("loginScreen").style.display="none";
+
+$("resetScreen").style.display="none";
+
+$("app").style.display="block";
+
+render();
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+$("loginForm").addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+$("loginError").textContent =
+"Logging in...";
+
+const email =
+$("loginEmail").value.trim();
+
+const password =
+$("loginPassword").value;
+
+const result =
+await auth.auth.signInWithPassword({
+
+email:email,
+
+password:password
+
+});
+
+if(result.error){
+
+$("loginError").textContent =
+result.error.message;
+
+return;
+
+}
+
+$("loginError").textContent="";
+
+}
+);
+
+
+/* =========================
+   FORGOT PASSWORD
+========================= */
+
+async function forgotPassword(){
+
+const email =
+$("loginEmail").value.trim();
+
+
+if(!email){
+
+$("loginError").textContent =
+"Please enter your email address first.";
+
+return;
+
+}
+
+
+$("loginError").textContent =
+"Sending password reset email...";
+
+
+try{
+
+const result =
+await auth.auth.resetPasswordForEmail(
+email,
+{
+redirectTo:
+"https://accountsdod.in/"
+}
+);
+
+
+if(result.error){
+
+$("loginError").textContent =
+"Error: " +
+result.error.message;
+
+return;
+
+}
+
+
+$("loginError").textContent =
+"Password reset email sent. Check your Gmail inbox and Spam folder.";
+
+
+}catch(error){
+
+$("loginError").textContent =
+"Error: " +
+error.message;
+
+}
+
+}
+
+
+/* =========================
+   PASSWORD RESET
+========================= */
+
+$("resetForm").addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+$("resetError").textContent="";
+
+$("resetSuccess").textContent="";
+
+
+const password =
+$("newPassword").value;
+
+const confirm =
+$("confirmPassword").value;
+
+
+if(password.length < 6){
+
+$("resetError").textContent =
+"Password must be at least 6 characters.";
+
+return;
+
+}
+
+
+if(password !== confirm){
+
+$("resetError").textContent =
+"Passwords do not match.";
+
+return;
+
+}
+
+
+const result =
+await auth.auth.updateUser({
+
+password:password
+
+});
+
+
+if(result.error){
+
+$("resetError").textContent =
+result.error.message;
+
+return;
+
+}
+
+
+$("resetSuccess").textContent =
+"Password updated successfully.";
+
+
+setTimeout(
+async function(){
+
+await auth.auth.signOut();
+
+showLogin();
+
+},
+1500
+);
+
+}
+);
+
+
+/* =========================
+   AUTH STATE
+========================= */
+
+auth.auth.onAuthStateChange(
+function(event,session){
+
+if(event === "PASSWORD_RECOVERY"){
+
+showReset();
+
+return;
+
+}
+
+if(recoveryMode){
+
+return;
+
+}
+
+if(session){
+
+showApp();
+
+}else{
+
+showLogin();
+
+}
+
+}
+);
+
+
+(async function(){
+
+const result =
+await auth.auth.getSession();
+
+const session =
+result.data.session;
+
+
+if(
+location.hash.includes("type=recovery")
+){
+
+showReset();
+
+}else if(session){
+
+showApp();
+
+}else{
+
+showLogin();
+
+}
+
+})();
+
+
+/* =========================
+   DATA
+========================= */
+
+function freshData(){
+
+return{
+items:[],
+movements:[],
+updatedAt:null
+};
+
+}
+
+
+/* =========================
+   SELECT FOLDER
+========================= */
+
+async function selectFolder(){
+
+if(!window.showDirectoryPicker){
+
+alert(
+"Please open Accounts Dod on Chrome or Edge on Windows to select a folder."
+);
+
+return;
+
+}
+
+
+try{
+
+dir =
+await window.showDirectoryPicker(
+{
+mode:"readwrite"
+}
+);
+
+await loadFromFolder();
+
+}catch(error){
+
+if(error.name !== "AbortError"){
+
+alert(
+"Folder error: " +
+error.message
+);
+
+}
+
+}
+
+}
+
+
+/* =========================
+   FILE
+========================= */
+
+async function getFile(
+name,
+create=false
+){
+
+if(!dir){
+
+throw new Error(
+"Please select a data folder first."
+);
+
+}
+
+return dir.getFileHandle(
+name,
+{
+create:create
+}
+);
+
+}
+
+
+/* =========================
+   LOAD DATA
+========================= */
+
+async function loadFromFolder(){
+
+try{
+
+const fileHandle =
+await getFile(
+"stock-data.json",
+false
+);
+
+const file =
+await fileHandle.getFile();
+
+const text =
+await file.text();
+
+db =
+JSON.parse(text);
+
+
+if(!db.items){
+db.items=[];
+}
+
+if(!db.movements){
+db.movements=[];
+}
+
+
+$("status").textContent =
+"Connected • " +
+db.items.length +
+" items • " +
+new Date(
+db.updatedAt || Date.now()
+).toLocaleString();
+
+
+}catch(error){
+
+db =
+freshData();
+
+await saveNow();
+
+$("status").textContent =
+"New stock-data.json created";
+
+}
+
+render();
+
+}
+
+
+/* =========================
+   WRITE JSON
+========================= */
+
+async function writeJson(
+name,
+data
+){
+
+const handle =
+await getFile(
+name,
+true
+);
+
+const writable =
+await handle.createWritable();
+
+await writable.write(
+JSON.stringify(
+data,
+null,
+2
+)
+);
+
+await writable.close();
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+async function saveNow(){
+
+db.updatedAt =
+now();
+
+
+if(dir){
+
+try{
+
+await writeJson(
+"stock-data.json",
+db
+);
+
+$("status").textContent =
+"Saved • " +
+new Date().toLocaleString();
+
+}catch(error){
+
+$("status").textContent =
+"Save error: " +
+error.message;
+
+}
+
+}else{
+
+localStorage.setItem(
+"accountsDodStock",
+JSON.stringify(db)
+);
+
+$("status").textContent =
+"Browser storage • Select a folder for file storage.";
+
+}
+
+
+renderStats();
+
+}
+
+
+/* =========================
+   BACKUP
+========================= */
+
+async function backupNow(){
+
+if(!dir){
+
+downloadBackup();
+
+return;
+
+}
+
+
+try{
+
+const stamp =
+new Date()
+.toISOString()
+.replace(/[:.]/g,"-");
+
+
+await writeJson(
+"backup-" +
+stamp +
+".json",
+db
+);
+
+alert(
+"Backup created successfully."
+);
+
+}catch(error){
+
+alert(
+"Backup failed: " +
+error.message
+);
+
+}
+
+}
+
+
+/* =========================
+   DOWNLOAD BACKUP
+========================= */
+
+function downloadBackup(){
+
+const blob =
+new Blob(
+[
+JSON.stringify(
+db,
+null,
+2
+)
+],
+{
+type:"application/json"
+}
+);
+
+const link =
+document.createElement("a");
+
+link.href =
+URL.createObjectURL(blob);
+
+link.download =
+"accounts-dod-stock-backup-" +
+new Date()
+.toISOString()
+.slice(0,10) +
+".json";
+
+link.click();
+
+URL.revokeObjectURL(
+link.href
+);
+
+}
+
+
+/* =========================
+   RESTORE
+========================= */
+
+function restoreBackup(){
+
+const input =
+document.createElement("input");
+
+input.type="file";
+
+input.accept=".json";
+
+
+input.onchange =
+async function(){
+
+const file =
+input.files[0];
+
+if(!file){
+return;
+}
+
+
+try{
+
+const restored =
+JSON.parse(
+await file.text()
+);
+
+
+if(
+!Array.isArray(restored.items) ||
+!Array.isArray(restored.movements)
+){
+
+throw new Error(
+"Invalid backup file."
+);
+
+}
+
+
+db =
+restored;
+
+await saveNow();
+
+render();
+
+alert(
+"Backup restored successfully."
+);
+
+
+}catch(error){
+
+alert(
+"Restore failed: " +
+error.message
+);
+
+}
+
+};
+
+
+input.click();
+
+}
+
+
+/* =========================
+   ADD ITEM
+========================= */
+
+function openAdd(){
+
+$("dialogTitle").textContent =
+"Add Item";
+
+$("itemId").value="";
+
+$("itemName").value="";
+
+$("itemRate").value="";
+
+$("itemQty").value="0";
+
+$("itemError").textContent="";
+
+$("itemDialog").showModal();
+
+}
+
+
+/* =========================
+   EDIT ITEM
+========================= */
+
+function openEdit(id){
+
+const item =
+db.items.find(
+x=>x.id===id
+);
+
+if(!item){
+return;
+}
+
+
+$("dialogTitle").textContent =
+"Edit Item";
+
+$("itemId").value =
+item.id;
+
+$("itemName").value =
+item.name;
+
+$("itemRate").value =
+item.rate;
+
+$("itemQty").value =
+item.qty;
+
+$("itemError").textContent="";
+
+$("itemDialog").showModal();
+
+}
+
+
+/* =========================
+   SAVE ITEM
+========================= */
+
+$("itemForm").addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+
+const id =
+$("itemId").value;
+
+const name =
+$("itemName").value.trim();
+
+const rate =
+Number(
+$("itemRate").value
+);
+
+const qty =
+Number(
+$("itemQty").value
+);
+
+
+if(
+!name ||
+rate < 0 ||
+qty < 0
+){
+
+$("itemError").textContent =
+"Please enter valid item details.";
+
+return;
+
+}
+
+
+if(id){
+
+const item =
+db.items.find(
+x=>x.id===id
+);
+
+if(item){
+
+item.name=name;
+
+item.rate=rate;
+
+item.qty=qty;
+
+item.updatedAt=now();
+
+}
+
+}else{
+
+const duplicate =
+db.items.find(
+x=>
+x.name
+.toLowerCase()
+.trim() ===
+name
+.toLowerCase()
+.trim()
+);
+
+
+if(duplicate){
+
+$("itemError").textContent =
+"This item already exists.";
+
+return;
+
+}
+
+
+db.items.push({
+
+id:crypto.randomUUID(),
+
+name:name,
+
+rate:rate,
+
+qty:qty,
+
+createdAt:now(),
+
+updatedAt:now()
+
+});
+
+}
+
+
+$("itemDialog").close();
+
+await saveNow();
+
+render();
+
+}
+);
+
+
+/* =========================
+   STOCK MOVEMENT
+========================= */
+
+function openStock(
+id,
+mode
+){
+
+const item =
+db.items.find(
+x=>x.id===id
+);
+
+if(!item){
+return;
+}
+
+
+$("stockId").value=id;
+
+$("stockMode").value=mode;
+
+
+$("stockTitle").textContent =
+mode==="add"
+?
+"➕ Add Stock"
+:
+"➖ Less Stock";
+
+
+$("stockInfo").innerHTML =
+"<b>" +
+escapeHtml(item.name) +
+"</b><br>" +
+"<span class='muted'>" +
+"Current stock: " +
+item.qty +
+"</span>";
+
+
+$("stockQty").value="";
+
+$("stockNote").value="";
+
+$("stockError").textContent="";
+
+$("stockDialog").showModal();
+
+}
+
+
+/* =========================
+   SAVE STOCK MOVEMENT
+========================= */
+
+$("stockForm").addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+
+const id =
+$("stockId").value;
+
+const mode =
+$("stockMode").value;
+
+const item =
+db.items.find(
+x=>x.id===id
+);
+
+if(!item){
+return;
+}
+
+
+const quantity =
+Number(
+$("stockQty").value
+);
+
+
+if(
+!quantity ||
+quantity <= 0
+){
+
+$("stockError").textContent =
+"Enter a quantity greater than zero.";
+
+return;
+
+}
+
+
+if(
+mode==="less" &&
+quantity > item.qty
+){
+
+$("stockError").textContent =
+"Stock cannot go below zero.";
+
+return;
+
+}
+
+
+if(mode==="add"){
+
+item.qty += quantity;
+
+}else{
+
+item.qty -= quantity;
+
+}
+
+
+item.updatedAt =
+now();
+
+
+db.movements.unshift({
+
+id:crypto.randomUUID(),
+
+itemId:id,
+
+itemName:item.name,
+
+mode:mode,
+
+qty:quantity,
+
+note:
+$("stockNote").value.trim(),
+
+time:now(),
+
+balance:item.qty
+
+});
+
+
+$("stockDialog").close();
+
+await saveNow();
+
+render();
+
+}
+);
+
+
+/* =========================
+   DELETE
+========================= */
+
+async function deleteItem(id){
+
+const item =
+db.items.find(
+x=>x.id===id
+);
+
+if(!item){
+return;
+}
+
+
+if(
+!confirm(
+"Delete " +
+item.name +
+"?"
+)
+){
+
+return;
+
+}
+
+
+db.items =
+db.items.filter(
+x=>x.id!==id
+);
+
+
+await saveNow();
+
+render();
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+const search =
+$("search").value
+.trim()
+.toLowerCase();
+
+
+const list =
+db.items.filter(
+item =>
+item.name
+.toLowerCase()
+.includes(search)
+);
+
+
+if(!list.length){
+
+$("items").innerHTML =
+"<div class='card muted'>" +
+"No items found." +
+"</div>";
+
+renderStats();
+
+return;
+
+}
+
+
+$("items").innerHTML =
+list.map(
+item => `
+
+<div class="item">
+
+<div class="row">
+
+<div>
+
+<b>
+${escapeHtml(item.name)}
+</b>
+
+<div class="muted">
+Rate: ${money(item.rate)}
+•
+Value: ${money(item.rate * item.qty)}
+</div>
+
+</div>
+
+<div class="qty">
+${item.qty}
+</div>
+
+</div>
+
+
+<div
+class="actions"
+style="margin-top:10px"
+>
+
+<button
+class="green"
+onclick="openStock('${item.id}','add')"
+>
+＋ Add Stock
+</button>
+
+<button
+class="red"
+onclick="openStock('${item.id}','less')"
+>
+− Less Stock
+</button>
+
+<button
+onclick="openEdit('${item.id}')"
+>
+✏️ Edit
+</button>
+
+<button
+class="danger"
+onclick="deleteItem('${item.id}')"
+>
+🗑️ Delete
+</button>
+
+</div>
+
+
+<div
+class="muted"
+style="margin-top:8px"
+>
+Last edited:
+${
+item.updatedAt
+?
+new Date(
+item.updatedAt
+).toLocaleString()
+:
+"-"
+}
+</div>
+
+</div>
+
+`
+).join("");
+
+
+renderStats();
+
+}
+
+
+/* =========================
+   STATISTICS
+========================= */
+
+function renderStats(){
+
+const totalQty =
+db.items.reduce(
+(total,item)=>
+total +
+Number(item.qty || 0),
+0
+);
+
+
+const totalValue =
+db.items.reduce(
+(total,item)=>
+total +
+(
+Number(item.qty || 0) *
+Number(item.rate || 0)
+),
+0
+);
+
+
+$("statItems").textContent =
+db.items.length;
+
+
+$("statQty").textContent =
+totalQty.toLocaleString(
+"en-IN"
+);
+
+
+$("statValue").textContent =
+money(totalValue);
+
+
+$("statMoves").textContent =
+db.movements.length;
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function showHistory(){
+
+const rows =
+db.movements.slice(
+0,
+300
+);
+
+
+if(!rows.length){
+
+$("historyBody").innerHTML =
+"<p class='muted'>" +
+"No movements yet." +
+"</p>";
+
+$("historyDialog").showModal();
+
+return;
+
+}
+
+
+$("historyBody").innerHTML = `
+
+<div style="overflow:auto">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Item</th>
+
+<th>Type</th>
+
+<th>Qty</th>
+
+<th>Balance</th>
+
+<th>Note</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${
+rows.map(
+movement => `
+
+<tr>
+
+<td>
+${new Date(
+movement.time
+).toLocaleString()}
+</td>
+
+<td>
+${escapeHtml(
+movement.itemName
+)}
+</td>
+
+<td>
+
+<span class="badge">
+
+${
+movement.mode==="add"
+?
+"ADD"
+:
+"LESS"
+}
+
+</span>
+
+</td>
+
+<td>
+${movement.qty}
+</td>
+
+<td>
+${movement.balance}
+</td>
+
+<td>
+${escapeHtml(
+movement.note || ""
+)}
+</td>
+
+</tr>
+
+`
+).join("")
+}
+
+</tbody>
+
+</table>
+
+</div>
+
+`;
+
+
+$("historyDialog").showModal();
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(value){
+
+return String(
+value ?? ""
+).replace(
+/[&<>"']/g,
+function(char){
+
+return {
+
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+
+}[char];
+
+}
+);
+
+}
+
+
+/* =========================
+   AUTO SAVE
+========================= */
+
+window.addEventListener(
+"beforeunload",
+function(){
+
+try{
+
+localStorage.setItem(
+"accountsDodStock",
+JSON.stringify(db)
+);
+
+}catch(error){}
+
+}
+);
+
+
+setInterval(
+function(){
+
+if(
+$("app").style.display !== "none"
+){
+
+saveNow();
+
+}
+
+},
+15 * 60 * 1000
+);
+
+</script>
+
+</body>
+</html>
