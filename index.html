@@ -1,35 +1,36 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Accounts Dod • Stock Manager</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-body{margin:0;font-family:system-ui;background:#f4f6fa;color:#182033}
-header{background:#182033;color:white;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f6fa;color:#182033}
+header{background:#182033;color:#fff;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
 main{max-width:1100px;margin:auto;padding:15px}
-.card,.item{background:white;border:1px solid #e2e7ef;border-radius:14px;padding:14px;margin:10px 0}
-button,input{font:inherit;padding:10px;border:1px solid #ddd;border-radius:9px;background:white}
+.card,.item{background:#fff;border:1px solid #e2e7ef;border-radius:14px;padding:14px;margin:10px 0}
+button,input,select{font:inherit;padding:10px;border:1px solid #d8dee8;border-radius:9px;background:#fff}
 button{font-weight:700;cursor:pointer}
-.primary{background:#2563eb;color:white}
-.green{background:#e9f8f0}
-.red{background:#fff0f0}
+button:disabled{opacity:.5;cursor:not-allowed}
+.primary{background:#2563eb;color:#fff;border-color:#2563eb}
+.green{background:#e9f8f0;border-color:#9ed8b9}
+.red{background:#fff0f0;border-color:#efaaaa}
+.danger{background:#fee2e2;color:#991b1b;border-color:#fecaca}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .stat b{display:block;font-size:22px}
 .toolbar,.actions{display:flex;gap:8px;flex-wrap:wrap}
 .toolbar input{flex:1;min-width:220px}
-.row{display:flex;justify-content:space-between;gap:10px}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center}
 .qty{font-size:22px;font-weight:800}
 .muted{color:#687386;font-size:12px}
-dialog{border:0;border-radius:15px;width:min(480px,92vw)}
-dialog::backdrop{background:#0008}
 .form{display:grid;gap:10px}
-.form input{width:100%;box-sizing:border-box}
+.form input,.form select{width:100%}
+.item .actions{justify-content:flex-end}
 
-#loginScreen{
+#loginScreen,#resetScreen{
 position:fixed;
 inset:0;
 background:#f4f6fa;
@@ -41,8 +42,8 @@ z-index:9999
 }
 
 .loginbox{
-background:white;
-width:min(420px,100%);
+background:#fff;
+width:min(430px,100%);
 padding:28px;
 border-radius:18px;
 box-shadow:0 10px 40px #0002
@@ -50,13 +51,12 @@ box-shadow:0 10px 40px #0002
 
 .loginbox input{
 width:100%;
-box-sizing:border-box;
 margin:6px 0 12px
 }
 
 .loginbox button{
 width:100%;
-margin-top:6px
+margin-top:7px
 }
 
 .error{
@@ -65,22 +65,67 @@ font-size:13px;
 min-height:18px
 }
 
+.success{
+color:#18794e;
+font-size:13px;
+min-height:18px
+}
+
 #app{display:none}
+
+.badge{
+display:inline-block;
+padding:4px 8px;
+border-radius:999px;
+background:#eef2ff;
+font-size:12px
+}
+
+dialog{
+border:0;
+border-radius:15px;
+width:min(520px,92vw);
+padding:0
+}
+
+dialog::backdrop{background:#0008}
+.modal{padding:18px}
+
+table{
+width:100%;
+border-collapse:collapse
+}
+
+th,td{
+padding:8px;
+border-bottom:1px solid #edf0f4;
+text-align:left;
+font-size:14px
+}
+
+.right{text-align:right}
 
 @media(max-width:700px){
 .stats{grid-template-columns:1fr 1fr}
 header{align-items:flex-start}
+.row{align-items:flex-start;flex-direction:column}
+.item .actions{justify-content:flex-start}
 }
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
 <div id="loginScreen">
+
 <div class="loginbox">
 
 <h2>🔐 Accounts Dod</h2>
-<p class="muted">Stock Manager Login</p>
+
+<p class="muted">
+Stock Manager Login
+</p>
 
 <form id="loginForm">
 
@@ -91,7 +136,8 @@ id="loginEmail"
 type="email"
 value="rahulkangankar@gmail.com"
 autocomplete="username"
-required>
+required
+>
 
 <label>Password</label>
 
@@ -99,7 +145,8 @@ required>
 id="loginPassword"
 type="password"
 autocomplete="current-password"
-required>
+required
+>
 
 <div id="loginError" class="error"></div>
 
@@ -117,28 +164,304 @@ Forgot Password
 </div>
 
 
+<!-- PASSWORD RESET -->
+<div id="resetScreen" style="display:none">
+
+<div class="loginbox">
+
+<h2>🔑 Set New Password</h2>
+
+<p class="muted">
+Create a new password for your Accounts Dod login.
+</p>
+
+<form id="resetForm">
+
+<label>New password</label>
+
+<input
+id="newPassword"
+type="password"
+minlength="6"
+autocomplete="new-password"
+required
+>
+
+<label>Confirm password</label>
+
+<input
+id="confirmPassword"
+type="password"
+minlength="6"
+autocomplete="new-password"
+required
+>
+
+<div id="resetError" class="error"></div>
+
+<div id="resetSuccess" class="success"></div>
+
+<button class="primary" type="submit">
+Update Password
+</button>
+
+<button type="button" onclick="showLogin()">
+Back to Login
+</button>
+
+</form>
+
+</div>
+</div>
+
+
+<!-- APP -->
 <div id="app">
 
 <header>
 
 <div>
-<b>📦 Accounts Dod • Stock Manager</b>
 
-<div class="muted" style="color:#bdc6d5">
+<b>
+📦 Accounts Dod • Stock Manager
+</b>
+
+<div
+class="muted"
+style="color:#bdc6d5"
+>
 File-Sync Edition • Accounts Dod
 </div>
 
 </div>
 
-<button onclick="logout()">🚪 Logout</button>
+<button onclick="logout()">
+🚪 Logout
+</button>
 
 </header>
 
 
 <main>
 
+<!-- STORAGE -->
 <div class="card">
 
 <b>📁 Data Storage</b>
 
-<p id="status">No folder selected</
+<p id="status">
+No folder selected
+</p>
+
+<div class="actions">
+
+<button
+class="primary"
+onclick="selectFolder()"
+>
+Select Data Folder
+</button>
+
+<button onclick="saveNow()">
+💾 Save Now
+</button>
+
+<button onclick="backupNow()">
+🛡️ Backup
+</button>
+
+<button onclick="restoreBackup()">
+♻️ Restore JSON
+</button>
+
+</div>
+
+<p class="muted">
+Recommended: select a folder inside your Google Drive,
+Dropbox or OneDrive synced folder on Windows.
+</p>
+
+</div>
+
+
+<!-- STATS -->
+<div class="stats">
+
+<div class="card stat">
+<span class="muted">Items</span>
+<b id="statItems">0</b>
+</div>
+
+<div class="card stat">
+<span class="muted">Total Qty</span>
+<b id="statQty">0</b>
+</div>
+
+<div class="card stat">
+<span class="muted">Stock Value</span>
+<b id="statValue">₹0</b>
+</div>
+
+<div class="card stat">
+<span class="muted">Movements</span>
+<b id="statMoves">0</b>
+</div>
+
+</div>
+
+
+<!-- SEARCH / BUTTONS -->
+<div class="card">
+
+<div class="toolbar">
+
+<input
+id="search"
+placeholder="🔎 Search item..."
+oninput="render()"
+>
+
+<button
+class="primary"
+onclick="openAdd()"
+>
+＋ Add Item
+</button>
+
+<button onclick="showHistory()">
+📜 History
+</button>
+
+<button onclick="downloadBackup()">
+⬇️ Download Backup
+</button>
+
+</div>
+
+</div>
+
+
+<div id="items"></div>
+
+</main>
+
+</div>
+
+
+<!-- ADD / EDIT ITEM -->
+<dialog id="itemDialog">
+
+<div class="modal">
+
+<h3 id="dialogTitle">
+Add Item
+</h3>
+
+<form
+id="itemForm"
+class="form"
+>
+
+<input
+id="itemId"
+type="hidden"
+>
+
+<label>
+Product / Item name
+
+<input
+id="itemName"
+required
+>
+
+</label>
+
+
+<label>
+Rate per unit
+
+<input
+id="itemRate"
+type="number"
+min="0"
+step="0.01"
+required
+>
+
+</label>
+
+
+<label>
+Opening quantity
+
+<input
+id="itemQty"
+type="number"
+min="0"
+step="0.01"
+required
+>
+
+</label>
+
+
+<div
+id="itemError"
+class="error"
+></div>
+
+
+<div class="actions">
+
+<button
+type="button"
+onclick="itemDialog.close()"
+>
+Cancel
+</button>
+
+<button
+class="primary"
+type="submit"
+>
+Save Item
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</dialog>
+
+
+<!-- STOCK MOVEMENT -->
+<dialog id="stockDialog">
+
+<div class="modal">
+
+<h3 id="stockTitle">
+Stock Movement
+</h3>
+
+<form
+id="stockForm"
+class="form"
+>
+
+<input
+id="stockId"
+type="hidden"
+>
+
+<input
+id="stockMode"
+type="hidden"
+>
+
+<div id="stockInfo"></div>
+
+
+<label>
