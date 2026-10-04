@@ -41,7 +41,7 @@ padding:14px;
 margin:10px 0
 }
 
-button,input{
+button,input,select{
 font:inherit;
 padding:10px;
 border:1px solid #d8dee8;
@@ -52,6 +52,11 @@ background:white
 button{
 font-weight:700;
 cursor:pointer
+}
+
+button:disabled{
+opacity:.6;
+cursor:not-allowed
 }
 
 .primary{
@@ -95,6 +100,10 @@ flex-wrap:wrap
 .toolbar input{
 flex:1;
 min-width:220px
+}
+
+.toolbar select{
+min-width:180px
 }
 
 .row{
@@ -163,7 +172,7 @@ margin-top:7px
 dialog{
 border:0;
 border-radius:15px;
-width:min(550px,92vw);
+width:min(600px,92vw);
 padding:0
 }
 
@@ -180,8 +189,68 @@ display:grid;
 gap:10px
 }
 
-.form input{
+.form input,
+.form select{
 width:100%
+}
+
+.location-row{
+border:1px solid #e2e7ef;
+border-radius:10px;
+padding:10px;
+display:grid;
+grid-template-columns:1.4fr 1fr 1fr 100px 40px;
+gap:7px;
+align-items:center;
+background:#f8fafc
+}
+
+.location-row input{
+width:100%
+}
+
+.location-title{
+font-weight:700;
+margin-bottom:5px
+}
+
+.location-summary{
+margin-top:8px;
+display:flex;
+gap:6px;
+flex-wrap:wrap
+}
+
+.location-badge{
+display:inline-block;
+padding:4px 8px;
+border-radius:20px;
+background:#eef2ff;
+font-size:12px
+}
+
+.location-list{
+margin-top:10px;
+border-top:1px solid #eee;
+padding-top:8px
+}
+
+.location-line{
+display:flex;
+justify-content:space-between;
+gap:10px;
+padding:6px 0;
+border-bottom:1px dashed #e5e7eb
+}
+
+.location-line:last-child{
+border-bottom:0
+}
+
+.empty-location{
+color:#687386;
+font-size:13px;
+padding:8px 0
 }
 
 table{
@@ -219,12 +288,23 @@ align-items:flex-start;
 flex-direction:column
 }
 
+.location-row{
+grid-template-columns:1fr 1fr;
+}
+
+.location-row input:first-child{
+grid-column:1/-1
+}
+
+.location-row button{
+width:100%
+}
+
 }
 </style>
 </head>
 
 <body>
-
 
 <!-- LOGIN SCREEN -->
 
@@ -369,7 +449,10 @@ File-Sync Edition • Accounts Dod
 
 </div>
 
-<button onclick="logout()">
+<button
+id="logoutBtn"
+type="button"
+>
 🚪 Logout
 </button>
 
@@ -459,6 +542,15 @@ placeholder="🔎 Search item..."
 oninput="render()"
 >
 
+<select
+id="locationFilter"
+onchange="render()"
+>
+<option value="">
+📍 All Locations
+</option>
+</select>
+
 <button
 class="primary"
 onclick="openAdd()"
@@ -531,17 +623,25 @@ required
 </label>
 
 <label>
-Quantity
+Locations & Stock</label>
 
-<input
-id="itemQty"
-type="number"
-min="0"
-step="0.01"
-required
+<div
+id="initialLocations"
 >
+</div>
 
-</label>
+<button
+type="button"
+onclick="addLocationRow()"
+>
+＋ Add Location
+</button>
+
+<div
+class="muted"
+>
+You can keep stock in multiple locations such as Main Godown, Shop or Warehouse.
+</div>
 
 <div
 id="itemError"
@@ -601,6 +701,42 @@ type="hidden"
 <div id="stockInfo"></div>
 
 <label>
+Location
+
+<select id="stockLocation" required>
+</select>
+
+</label>
+
+<div
+id="newLocationBox"
+style="display:none"
+>
+
+<div class="card">
+
+<b>New Location</b>
+
+<input
+id="newLocationName"
+placeholder="Location name"
+>
+
+<input
+id="newLocationRack"
+placeholder="Rack"
+>
+
+<input
+id="newLocationBin"
+placeholder="Bin / Shelf"
+>
+
+</div>
+
+</div>
+
+<label>
 Quantity
 
 <input
@@ -638,6 +774,99 @@ class="primary"
 type="submit"
 >
 Save Movement
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</dialog>
+
+
+<!-- TRANSFER -->
+
+<dialog id="transferDialog">
+
+<div class="modal">
+
+<h3>
+🔄 Transfer Stock
+</h3>
+
+<form
+id="transferForm"
+class="form"
+>
+
+<input
+id="transferId"
+type="hidden"
+>
+
+<div id="transferInfo"></div>
+
+<label>
+From Location
+
+<select
+id="transferFrom"
+required
+>
+</select>
+
+<label>
+To Location
+
+<select
+id="transferTo"
+required
+>
+</select>
+
+<label>
+Quantity
+
+<input
+id="transferQty"
+type="number"
+min="0.01"
+step="0.01"
+required
+>
+
+</label>
+
+<label>
+Note
+
+<input
+id="transferNote"
+placeholder="Transfer note"
+>
+
+</label>
+
+<div
+id="transferError"
+class="error"
+></div>
+
+<div class="actions">
+
+<button
+type="button"
+onclick="transferDialog.close()"
+>
+Cancel
+</button>
+
+<button
+class="primary"
+type="submit"
+>
+Transfer Stock
 </button>
 
 </div>
@@ -737,6 +966,204 @@ maximumFractionDigits:2
 
 
 /* =========================
+   LOCATION HELPERS
+========================= */
+
+function normalizeItem(item){
+
+if(!Array.isArray(item.locations)){
+
+item.locations = [
+
+{
+id:crypto.randomUUID(),
+location:"Main Stock",
+rack:"",
+bin:"",
+qty:Number(item.qty || 0)
+}
+
+];
+
+}
+
+item.locations =
+item.locations.map(
+location => ({
+
+id:
+location.id ||
+crypto.randomUUID(),
+
+location:
+location.location ||
+"Main Stock",
+
+rack:
+location.rack ||
+"",
+
+bin:
+location.bin ||
+"",
+
+qty:
+Number(location.qty || 0)
+
+})
+);
+
+syncItemQty(item);
+
+return item;
+
+}
+
+
+function syncItemQty(item){
+
+item.qty =
+item.locations.reduce(
+(total,location)=>
+total +
+Number(location.qty || 0),
+0
+);
+
+return item.qty;
+
+}
+
+
+function addLocationRow(data={}){
+
+const container =
+$("initialLocations");
+
+const row =
+document.createElement("div");
+
+row.className =
+"location-row";
+
+row.innerHTML = `
+
+<input
+class="loc-name"
+placeholder="Location"
+value="${escapeAttr(data.location || "")}"
+required
+>
+
+<input
+class="loc-rack"
+placeholder="Rack"
+value="${escapeAttr(data.rack || "")}"
+>
+
+<input
+class="loc-bin"
+placeholder="Bin / Shelf"
+value="${escapeAttr(data.bin || "")}"
+>
+
+<input
+class="loc-qty"
+type="number"
+min="0"
+step="0.01"
+placeholder="Qty"
+value="${Number(data.qty || 0)}"
+required
+>
+
+<button
+type="button"
+class="danger"
+onclick="this.parentElement.remove()"
+>
+✕
+</button>
+
+`;
+
+container.appendChild(row);
+
+}
+
+
+function readLocationRows(){
+
+const rows =
+[
+...document.querySelectorAll(
+"#initialLocations .location-row"
+)
+];
+
+return rows.map(
+row => ({
+
+id:
+crypto.randomUUID(),
+
+location:
+row.querySelector(".loc-name").value.trim(),
+
+rack:
+row.querySelector(".loc-rack").value.trim(),
+
+bin:
+row.querySelector(".loc-bin").value.trim(),
+
+qty:
+Number(
+row.querySelector(".loc-qty").value || 0
+)
+
+})
+);
+
+}
+
+
+function locationLabel(location){
+
+let label =
+location.location || "Main Stock";
+
+if(location.rack){
+
+label +=
+" • Rack " +
+location.rack;
+
+}
+
+if(location.bin){
+
+label +=
+" • Bin " +
+location.bin;
+
+}
+
+return label;
+
+}
+
+
+function getLocation(item,id){
+
+return item.locations.find(
+location =>
+location.id === id
+);
+
+}
+
+
+/* =========================
    LOGIN SCREEN
 ========================= */
 
@@ -817,6 +1244,72 @@ return;
 }
 
 $("loginError").textContent="";
+
+}
+);
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+$("logoutBtn").addEventListener(
+"click",
+async function(){
+
+try{
+
+$("logoutBtn").disabled=true;
+
+$("logoutBtn").textContent =
+"Logging out...";
+
+const result =
+await auth.auth.signOut();
+
+if(result.error){
+
+console.error(
+"Logout error:",
+result.error
+);
+
+$("logoutBtn").disabled=false;
+
+$("logoutBtn").textContent =
+"🚪 Logout";
+
+alert(
+"Logout failed: " +
+result.error.message
+);
+
+return;
+
+}
+
+showLogin();
+
+$("loginPassword").value="";
+
+}catch(error){
+
+console.error(
+"Logout error:",
+error
+);
+
+$("logoutBtn").disabled=false;
+
+$("logoutBtn").textContent =
+"🚪 Logout";
+
+alert(
+"Logout failed: " +
+error.message
+);
+
+}
 
 }
 );
@@ -1144,6 +1637,12 @@ if(!db.movements){
 db.movements=[];
 }
 
+db.items =
+db.items.map(
+item =>
+normalizeItem(item)
+);
+
 
 $("status").textContent =
 "Connected • " +
@@ -1384,6 +1883,12 @@ throw new Error(
 }
 
 
+restored.items =
+restored.items.map(
+item =>
+normalizeItem(item)
+);
+
 db =
 restored;
 
@@ -1428,9 +1933,21 @@ $("itemName").value="";
 
 $("itemRate").value="";
 
-$("itemQty").value="0";
-
 $("itemError").textContent="";
+
+$("initialLocations").innerHTML="";
+
+addLocationRow({
+
+location:"Main Stock",
+
+rack:"",
+
+bin:"",
+
+qty:0
+
+});
 
 $("itemDialog").showModal();
 
@@ -1452,6 +1969,8 @@ if(!item){
 return;
 }
 
+normalizeItem(item);
+
 
 $("dialogTitle").textContent =
 "Edit Item";
@@ -1465,10 +1984,16 @@ item.name;
 $("itemRate").value =
 item.rate;
 
-$("itemQty").value =
-item.qty;
-
 $("itemError").textContent="";
+
+$("initialLocations").innerHTML="";
+
+
+item.locations.forEach(
+location =>
+addLocationRow(location)
+);
+
 
 $("itemDialog").showModal();
 
@@ -1497,22 +2022,48 @@ Number(
 $("itemRate").value
 );
 
-const qty =
-Number(
-$("itemQty").value
-);
+const locations =
+readLocationRows();
 
 
 if(
 !name ||
-rate < 0 ||
-qty < 0
+rate < 0
 ){
 
 $("itemError").textContent =
 "Please enter valid item details.";
 
 return;
+
+}
+
+
+if(!locations.length){
+
+$("itemError").textContent =
+"Please add at least one location.";
+
+return;
+
+}
+
+
+for(
+const location of locations
+){
+
+if(
+!location.location ||
+location.qty < 0
+){
+
+$("itemError").textContent =
+"Please enter valid location and quantity.";
+
+return;
+
+}
 
 }
 
@@ -1530,7 +2081,9 @@ item.name=name;
 
 item.rate=rate;
 
-item.qty=qty;
+item.locations=locations;
+
+syncItemQty(item);
 
 item.updatedAt=now();
 
@@ -1560,7 +2113,7 @@ return;
 }
 
 
-db.items.push({
+const item = {
 
 id:crypto.randomUUID(),
 
@@ -1568,13 +2121,19 @@ name:name,
 
 rate:rate,
 
-qty:qty,
+locations:locations,
+
+qty:0,
 
 createdAt:now(),
 
 updatedAt:now()
 
-});
+};
+
+syncItemQty(item);
+
+db.items.push(item);
 
 }
 
@@ -1607,6 +2166,8 @@ if(!item){
 return;
 }
 
+normalizeItem(item);
+
 
 $("stockId").value=id;
 
@@ -1626,10 +2187,46 @@ $("stockInfo").innerHTML =
 escapeHtml(item.name) +
 "</b><br>" +
 "<span class='muted'>" +
-"Current stock: " +
+"Total stock: " +
 item.qty +
 "</span>";
 
+
+$("stockLocation").innerHTML =
+item.locations.map(
+location => `
+
+<option value="${escapeAttr(location.id)}">
+
+${escapeHtml(
+locationLabel(location)
+)}
+ • Qty: ${location.qty}
+
+</option>
+
+`
+).join("");
+
+
+if(mode==="add"){
+
+$("stockLocation").innerHTML +=
+`
+<option value="__NEW__">
+＋ Add New Location
+</option>
+`;
+
+}
+
+
+$("newLocationBox").style.display =
+"none";
+
+$("newLocationName").value="";
+$("newLocationRack").value="";
+$("newLocationBin").value="";
 
 $("stockQty").value="";
 
@@ -1640,6 +2237,32 @@ $("stockError").textContent="";
 $("stockDialog").showModal();
 
 }
+
+
+/* =========================
+   LOCATION SELECT CHANGE
+========================= */
+
+$("stockLocation").addEventListener(
+"change",
+function(){
+
+if(
+this.value === "__NEW__"
+){
+
+$("newLocationBox").style.display =
+"block";
+
+}else{
+
+$("newLocationBox").style.display =
+"none";
+
+}
+
+}
+);
 
 
 /* =========================
@@ -1668,6 +2291,11 @@ if(!item){
 return;
 }
 
+normalizeItem(item);
+
+
+const locationId =
+$("stockLocation").value;
 
 const quantity =
 Number(
@@ -1688,13 +2316,74 @@ return;
 }
 
 
+let location =
+getLocation(
+item,
+locationId
+);
+
+
+if(
+mode==="add" &&
+locationId==="__NEW__"
+){
+
+const name =
+$("newLocationName").value.trim();
+
+const rack =
+$("newLocationRack").value.trim();
+
+const bin =
+$("newLocationBin").value.trim();
+
+
+if(!name){
+
+$("stockError").textContent =
+"Enter the new location name.";
+
+return;
+
+}
+
+
+location = {
+
+id:crypto.randomUUID(),
+
+location:name,
+
+rack:rack,
+
+bin:bin,
+
+qty:0
+
+};
+
+item.locations.push(location);
+
+}
+
+
+if(!location){
+
+$("stockError").textContent =
+"Please select a valid location.";
+
+return;
+
+}
+
+
 if(
 mode==="less" &&
-quantity > item.qty
+quantity > Number(location.qty || 0)
 ){
 
 $("stockError").textContent =
-"Stock cannot go below zero.";
+"Stock cannot go below zero in this location.";
 
 return;
 
@@ -1703,14 +2392,20 @@ return;
 
 if(mode==="add"){
 
-item.qty += quantity;
+location.qty =
+Number(location.qty || 0) +
+quantity;
 
 }else{
 
-item.qty -= quantity;
+location.qty =
+Number(location.qty || 0) -
+quantity;
 
 }
 
+
+syncItemQty(item);
 
 item.updatedAt =
 now();
@@ -1728,17 +2423,249 @@ mode:mode,
 
 qty:quantity,
 
+location:locationLabel(location),
+
+locationId:location.id,
+
 note:
 $("stockNote").value.trim(),
 
 time:now(),
 
-balance:item.qty
+balance:item.qty,
+
+locationBalance:location.qty
 
 });
 
 
 $("stockDialog").close();
+
+await saveNow();
+
+render();
+
+}
+);
+
+
+/* =========================
+   TRANSFER STOCK
+========================= */
+
+function openTransfer(id){
+
+const item =
+db.items.find(
+x=>x.id===id
+);
+
+if(!item){
+return;
+}
+
+normalizeItem(item);
+
+
+if(item.locations.length < 2){
+
+alert(
+"Add at least two locations before transferring stock."
+);
+
+return;
+
+}
+
+
+$("transferId").value=id;
+
+$("transferInfo").innerHTML =
+"<b>" +
+escapeHtml(item.name) +
+"</b><br>" +
+"<span class='muted'>Total stock: " +
+item.qty +
+"</span>";
+
+
+const options =
+item.locations.map(
+location => `
+
+<option value="${escapeAttr(location.id)}">
+
+${escapeHtml(
+locationLabel(location)
+)}
+ • Qty: ${location.qty}
+
+</option>
+
+`
+).join("");
+
+
+$("transferFrom").innerHTML =
+options;
+
+$("transferTo").innerHTML =
+options;
+
+
+$("transferQty").value="";
+
+$("transferNote").value="";
+
+$("transferError").textContent="";
+
+$("transferDialog").showModal();
+
+}
+
+
+/* =========================
+   SAVE TRANSFER
+========================= */
+
+$("transferForm").addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+
+const id =
+$("transferId").value;
+
+const item =
+db.items.find(
+x=>x.id===id
+);
+
+if(!item){
+return;
+}
+
+normalizeItem(item);
+
+
+const fromId =
+$("transferFrom").value;
+
+const toId =
+$("transferTo").value;
+
+const quantity =
+Number(
+$("transferQty").value
+);
+
+
+if(fromId === toId){
+
+$("transferError").textContent =
+"From and To locations must be different.";
+
+return;
+
+}
+
+
+if(
+!quantity ||
+quantity <= 0
+){
+
+$("transferError").textContent =
+"Enter a quantity greater than zero.";
+
+return;
+
+}
+
+
+const from =
+getLocation(
+item,
+fromId
+);
+
+const to =
+getLocation(
+item,
+toId
+);
+
+
+if(!from || !to){
+
+$("transferError").textContent =
+"Invalid location selected.";
+
+return;
+
+}
+
+
+if(
+quantity > Number(from.qty || 0)
+){
+
+$("transferError").textContent =
+"Insufficient stock in the source location.";
+
+return;
+
+}
+
+
+from.qty =
+Number(from.qty || 0) -
+quantity;
+
+to.qty =
+Number(to.qty || 0) +
+quantity;
+
+
+syncItemQty(item);
+
+item.updatedAt =
+now();
+
+
+db.movements.unshift({
+
+id:crypto.randomUUID(),
+
+itemId:id,
+
+itemName:item.name,
+
+mode:"transfer",
+
+qty:quantity,
+
+fromLocation:locationLabel(from),
+
+toLocation:locationLabel(to),
+
+note:
+$("transferNote").value.trim(),
+
+time:now(),
+
+balance:item.qty,
+
+fromBalance:from.qty,
+
+toBalance:to.qty
+
+});
+
+
+$("transferDialog").close();
 
 await saveNow();
 
@@ -1791,23 +2718,114 @@ render();
 
 
 /* =========================
+   LOCATION FILTER
+========================= */
+
+function renderLocationFilter(){
+
+const filter =
+$("locationFilter");
+
+const current =
+filter.value;
+
+
+const locations =
+new Set();
+
+
+db.items.forEach(
+item => {
+
+normalizeItem(item);
+
+item.locations.forEach(
+location => {
+
+if(location.location){
+
+locations.add(
+location.location
+);
+
+}
+
+});
+
+}
+);
+
+
+filter.innerHTML =
+`<option value="">
+📍 All Locations
+</option>` +
+[
+...locations
+].sort().map(
+location =>
+`<option value="${escapeAttr(location)}">
+📍 ${escapeHtml(location)}
+</option>`
+).join("");
+
+
+if(
+[...locations].includes(current)
+){
+
+filter.value=current;
+
+}
+
+}
+
+
+/* =========================
    RENDER
 ========================= */
 
 function render(){
+
+renderLocationFilter();
+
 
 const search =
 $("search").value
 .trim()
 .toLowerCase();
 
+const selectedLocation =
+$("locationFilter").value;
+
 
 const list =
 db.items.filter(
-item =>
+item => {
+
+normalizeItem(item);
+
+const nameMatch =
 item.name
 .toLowerCase()
-.includes(search)
+.includes(search);
+
+if(!nameMatch){
+return false;
+}
+
+if(!selectedLocation){
+return true;
+}
+
+return item.locations.some(
+location =>
+location.location ===
+selectedLocation &&
+Number(location.qty || 0) > 0
+);
+
+}
 );
 
 
@@ -1827,7 +2845,69 @@ return;
 
 $("items").innerHTML =
 list.map(
-item => `
+item => {
+
+const visibleLocations =
+selectedLocation
+?
+item.locations.filter(
+location =>
+location.location ===
+selectedLocation
+)
+:
+item.locations;
+
+
+const locationHtml =
+visibleLocations.length
+?
+visibleLocations.map(
+location => `
+
+<div class="location-line">
+
+<div>
+
+<b>
+📍 ${escapeHtml(
+location.location
+)}
+</b>
+
+<span class="muted">
+
+${location.rack
+?
+" • Rack " +
+escapeHtml(location.rack)
+:
+""}
+
+${location.bin
+?
+" • Bin " +
+escapeHtml(location.bin)
+:
+""}
+
+</span>
+
+</div>
+
+<b>
+${location.qty}
+</b>
+
+</div>
+
+`
+).join("")
+:
+"<div class='empty-location'>No location stock.</div>";
+
+
+return `
 
 <div class="item">
 
@@ -1840,16 +2920,40 @@ ${escapeHtml(item.name)}
 </b>
 
 <div class="muted">
+
 Rate: ${money(item.rate)}
+
 •
-Value: ${money(item.rate * item.qty)}
+
+Total Value:
+${money(item.rate * item.qty)}
+
 </div>
 
 </div>
+
+<div>
 
 <div class="qty">
 ${item.qty}
 </div>
+
+<div class="muted">
+Total Qty
+</div>
+
+</div>
+
+</div>
+
+
+<div class="location-list">
+
+<div class="location-title">
+📍 Stock by Location
+</div>
+
+${locationHtml}
 
 </div>
 
@@ -1874,6 +2978,12 @@ onclick="openStock('${item.id}','less')"
 </button>
 
 <button
+onclick="openTransfer('${item.id}')"
+>
+🔄 Transfer
+</button>
+
+<button
 onclick="openEdit('${item.id}')"
 >
 ✏️ Edit
@@ -1893,7 +3003,9 @@ onclick="deleteItem('${item.id}')"
 class="muted"
 style="margin-top:8px"
 >
+
 Last edited:
+
 ${
 item.updatedAt
 ?
@@ -1903,11 +3015,14 @@ item.updatedAt
 :
 "-"
 }
-</div>
 
 </div>
 
-`
+</div>
+
+`;
+
+}
 ).join("");
 
 
@@ -2008,6 +3123,8 @@ $("historyBody").innerHTML = `
 
 <th>Qty</th>
 
+<th>Location</th>
+
 <th>Balance</th>
 
 <th>Note</th>
@@ -2045,7 +3162,11 @@ movement.mode==="add"
 ?
 "ADD"
 :
+movement.mode==="less"
+?
 "LESS"
+:
+"TRANSFER"
 }
 
 </span>
@@ -2054,6 +3175,24 @@ movement.mode==="add"
 
 <td>
 ${movement.qty}
+</td>
+
+<td>
+
+${
+movement.mode==="transfer"
+?
+escapeHtml(
+(movement.fromLocation || "") +
+" → " +
+(movement.toLocation || "")
+)
+:
+escapeHtml(
+movement.location || ""
+)
+}
+
 </td>
 
 <td>
@@ -2110,6 +3249,13 @@ return {
 
 }
 );
+
+}
+
+
+function escapeAttr(value){
+
+return escapeHtml(value);
 
 }
 
