@@ -6,49 +6,7 @@
 <title>Accounts Dod • Stock Manager</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f6fa;color:#182033}
-header{background:#182033;color:#fff;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-main{max-width:1150px;margin:auto;padding:15px}
-.card,.item{background:#fff;border:1px solid #e2e7ef;border-radius:14px;padding:14px;margin:10px 0}
-button,input,select{font:inherit;padding:10px;border:1px solid #d8dee8;border-radius:9px;background:#fff}
-button{font-weight:700;cursor:pointer}
-.primary{background:#2563eb;color:#fff;border-color:#2563eb}
-.green{background:#e9f8f0;border-color:#9ed8b9}
-.red{background:#fff0f0;border-color:#efaaaa}
-.danger{background:#fee2e2;color:#991b1b}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.stat b{display:block;font-size:22px}
-.toolbar,.actions{display:flex;gap:8px;flex-wrap:wrap}
-.toolbar input{flex:1;min-width:200px}
-.row{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.qty{font-size:22px;font-weight:800}
-.muted{color:#687386;font-size:12px}
-.error{color:#c62828;font-size:13px;min-height:20px}
-.success{color:#18804b;font-size:13px;min-height:20px}
-#app{display:none}
-#loginScreen,#resetScreen{position:fixed;inset:0;background:#f4f6fa;display:flex;align-items:center;justify-content:center;padding:20px;z-index:9999}
-.loginbox{background:#fff;width:min(430px,100%);padding:28px;border-radius:18px;box-shadow:0 10px 40px #0002}
-.loginbox input{width:100%;margin:6px 0 12px}
-.loginbox button{width:100%;margin-top:7px}
-dialog{border:0;border-radius:15px;width:min(600px,94vw);padding:0}
-dialog::backdrop{background:#0008}
-.modal{padding:18px}
-.form{display:grid;gap:10px}
-.form input,.form select{width:100%}
-.location-row{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:7px;margin-bottom:8px}
-.location-box{background:#f8fafc;border:1px solid #e5eaf0;border-radius:10px;padding:10px;margin-top:10px}
-.location-line{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #edf0f4}
-.location-line:last-child{border-bottom:0}
-.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#eef2ff;font-size:12px}
-table{width:100%;border-collapse:collapse}
-th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;font-size:13px}
-@media(max-width:700px){
-.stats{grid-template-columns:1fr 1fr}
-header{align-items:flex-start}
-.row{align-items:flex-start;flex-direction:column}
-.location-row{grid-template-columns:1fr 1fr}
-}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f6fa;color:#182033}header{background:#182033;color:#fff;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px}main{max-width:1150px;margin:auto;padding:15px}.card,.item{background:#fff;border:1px solid #e2e7ef;border-radius:14px;padding:14px;margin:10px 0}button,input,select{font:inherit;padding:10px;border:1px solid #d8dee8;border-radius:9px;background:#fff}button{font-weight:700;cursor:pointer}.primary{background:#2563eb;color:#fff;border-color:#2563eb}.green{background:#e9f8f0;border-color:#9ed8b9}.red{background:#fff0f0;border-color:#efaaaa}.danger{background:#fee2e2;color:#991b1b}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat b{display:block;font-size:22px}.toolbar,.actions{display:flex;gap:8px;flex-wrap:wrap}.toolbar input{flex:1;min-width:200px}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.qty{font-size:22px;font-weight:800}.muted{color:#687386;font-size:12px}.error{color:#c62828;font-size:13px;min-height:20px}.success{color:#18804b;font-size:13px;min-height:20px}#app{display:none}#loginScreen,#resetScreen{position:fixed;inset:0;background:#f4f6fa;display:flex;align-items:center;justify-content:center;padding:20px;z-index:9999}.loginbox{background:#fff;width:min(430px,100%);padding:28px;border-radius:18px;box-shadow:0 10px 40px #0002}.loginbox input{width:100%;margin:6px 0 12px}.loginbox button{width:100%;margin-top:7px}dialog{border:0;border-radius:15px;width:min(620px,94vw);padding:0}dialog::backdrop{background:#0008}.modal{padding:18px}.form{display:grid;gap:10px}.form input,.form select{width:100%}.location-row{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:7px;margin:7px 0}.location-box{background:#f8fafc;border:1px solid #e5eaf0;border-radius:10px;padding:10px;margin-top:10px}.location-line{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #edf0f4}.location-line:last-child{border-bottom:0}.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#eef2ff;font-size:12px}table{width:100%;border-collapse:collapse}th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;font-size:13px}@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}header{align-items:flex-start}.row{align-items:flex-start;flex-direction:column}.location-row{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -96,31 +54,49 @@ header{align-items:flex-start}
 </header>
 
 <main>
+
 <div class="card">
 <b>📁 Data Storage</b>
-<p id="status">No folder selected</p>
+<p id="status">Browser storage ready</p>
 <div class="actions">
 <button class="primary" onclick="selectFolder()">Select Data Folder</button>
 <button onclick="saveNow()">💾 Save Now</button>
 <button onclick="backupNow()">🛡️ Backup</button>
 <button onclick="restoreBackup()">♻️ Restore</button>
 </div>
-<p class="muted">On Windows Chrome or Edge, select a folder inside Google Drive, Dropbox or OneDrive for file syncing.</p>
+<p class="muted">
+On Windows Chrome or Edge, select a folder inside Google Drive,
+Dropbox or OneDrive for file syncing.
+</p>
 </div>
 
 <div class="stats">
-<div class="card stat"><span class="muted">Items</span><b id="statItems">0</b></div>
-<div class="card stat"><span class="muted">Total Qty</span><b id="statQty">0</b></div>
-<div class="card stat"><span class="muted">Stock Value</span><b id="statValue">₹0</b></div>
-<div class="card stat"><span class="muted">Movements</span><b id="statMoves">0</b></div>
+<div class="card stat">
+<span class="muted">Items</span>
+<b id="statItems">0</b>
+</div>
+<div class="card stat">
+<span class="muted">Total Qty</span>
+<b id="statQty">0</b>
+</div>
+<div class="card stat">
+<span class="muted">Stock Value</span>
+<b id="statValue">₹0</b>
+</div>
+<div class="card stat">
+<span class="muted">Movements</span>
+<b id="statMoves">0</b>
+</div>
 </div>
 
 <div class="card">
 <div class="toolbar">
 <input id="search" placeholder="🔎 Search item..." oninput="render()">
+
 <select id="locationFilter" onchange="render()">
 <option value="">📍 All Locations</option>
 </select>
+
 <button class="primary" onclick="openAdd()">＋ Add Item</button>
 <button onclick="showHistory()">📜 History</button>
 <button onclick="downloadBackup()">⬇️ Backup</button>
@@ -128,690 +104,2679 @@ header{align-items:flex-start}
 </div>
 
 <div id="items"></div>
+
 </main>
 </div>
 
 <dialog id="itemDialog">
 <div class="modal">
+
 <h3 id="dialogTitle">Add Item</h3>
+
 <form id="itemForm" class="form">
+
 <input id="itemId" type="hidden">
-<label>Product / Item Name<input id="itemName" required></label>
-<label>Rate Per Unit<input id="itemRate" type="number" min="0" step="0.01" required></label>
+
+<label>
+Product / Item Name
+<input id="itemName" required>
+</label>
+
+<label>
+Rate Per Unit
+<input id="itemRate" type="number" min="0" step="0.01" required>
+</label>
+
 <div class="location-box">
+
 <b>📍 Initial Stock Locations</b>
-<p class="muted">You can keep the same product in multiple locations.</p>
+
+<p class="muted">
+You can keep the same product in multiple locations.
+</p>
+
 <div id="initialLocations"></div>
-<button type="button" onclick="addLocationRow('initialLocations')">＋ Add Location</button>
+
+<button
+type="button"
+onclick="addLocationRow('initialLocations')"
+>
+＋ Add Location
+</button>
+
 </div>
+
 <div id="itemError" class="error"></div>
+
 <div class="actions">
-<button type="button" onclick="itemDialog.close()">Cancel</button>
-<button class="primary" type="submit">Save Item</button>
+
+<button
+type="button"
+onclick="itemDialog.close()"
+>
+Cancel
+</button>
+
+<button
+class="primary"
+type="submit"
+>
+Save Item
+</button>
+
 </div>
+
 </form>
 </div>
 </dialog>
 
 <dialog id="stockDialog">
 <div class="modal">
+
 <h3 id="stockTitle">Stock Movement</h3>
+
 <form id="stockForm" class="form">
+
 <input id="stockId" type="hidden">
 <input id="stockMode" type="hidden">
+
 <div id="stockInfo"></div>
-<label>Location<select id="stockLocation" required></select></label>
-<label>Quantity<input id="stockQty" type="number" min="0.01" step="0.01" required></label>
-<label>Note / Customer<input id="stockNote"></label>
+
+<label>
+Location
+<select id="stockLocation" required></select>
+</label>
+
+<label>
+Quantity
+<input
+id="stockQty"
+type="number"
+min="0.01"
+step="0.01"
+required
+>
+</label>
+
+<label>
+Note / Customer
+<input id="stockNote">
+</label>
+
 <div id="stockError" class="error"></div>
+
 <div class="actions">
-<button type="button" onclick="stockDialog.close()">Cancel</button>
-<button class="primary" type="submit">Save Movement</button>
+
+<button
+type="button"
+onclick="stockDialog.close()"
+>
+Cancel
+</button>
+
+<button
+class="primary"
+type="submit"
+>
+Save Movement
+</button>
+
 </div>
+
 </form>
 </div>
 </dialog>
 
 <dialog id="transferDialog">
 <div class="modal">
+
 <h3>🔄 Transfer Stock</h3>
+
 <form id="transferForm" class="form">
+
 <input id="transferId" type="hidden">
-<label>From Location<select id="transferFrom" required></select></label>
-<label>To Location<select id="transferTo" required></select></label>
-<label>Quantity<input id="transferQty" type="number" min="0.01" step="0.01" required></label>
+
+<label>
+From Location
+<select id="transferFrom" required></select>
+</label>
+
+<label>
+To Location
+<select id="transferTo" required></select>
+</label>
+
+<label>
+Quantity
+<input
+id="transferQty"
+type="number"
+min="0.01"
+step="0.01"
+required
+>
+</label>
+
+<label>
+Note
+<input id="transferNote">
+</label>
+
 <div id="transferError" class="error"></div>
+
 <div class="actions">
-<button type="button" onclick="transferDialog.close()">Cancel</button>
-<button class="primary" type="submit">Transfer Stock</button>
+
+<button
+type="button"
+onclick="transferDialog.close()"
+>
+Cancel
+</button>
+
+<button
+class="primary"
+type="submit"
+>
+Transfer Stock
+</button>
+
 </div>
+
 </form>
 </div>
 </dialog>
 
 <dialog id="historyDialog">
 <div class="modal">
+
 <div class="row">
+
 <h3>📜 Movement History</h3>
+
 <button onclick="historyDialog.close()">✕</button>
+
 </div>
+
 <div id="historyBody"></div>
+
 </div>
 </dialog>
 
 <script>
-const SUPABASE_URL="https://dlsxwygoylngvtcvnxtr.supabase.co";
-const SUPABASE_KEY="sb_publishable_fnwe7FjrJMf3egYJ9hoX3A_KJh1spEj";
-const auth=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-   let db={items:[],movements:[],updatedAt:null};
-let dir=null;
-let recoveryMode=false;
 
-const $=id=>document.getElementById(id);
-const now=()=>new Date().toISOString();
-const money=n=>"₹"+Number(n||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+const SUPABASE_URL =
+"https://dlsxwygoylngvtcvnxtr.supabase.co";
 
-function showLogin(){
-$("loginScreen").style.display="flex";
-$("resetScreen").style.display="none";
-$("app").style.display="none";
-recoveryMode=false;
+const SUPABASE_KEY =
+"sb_publishable_fnwe7FjrJMf3egYJ9hoX3A_KJh1spEj";
+
+const auth =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+const STORAGE_KEY =
+"accountsDodStock";
+
+let db = {
+items:[],
+movements:[],
+updatedAt:null
+};
+
+let dir = null;
+
+let recoveryMode = false;
+
+let saving = false;
+
+const $ =
+id =>
+document.getElementById(id);
+
+const now =
+() =>
+new Date().toISOString();
+
+const money =
+n =>
+"₹" +
+Number(n || 0).toLocaleString(
+"en-IN",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+
+/* =========================
+   DATA HELPERS
+========================= */
+
+function freshData(){
+
+return {
+items:[],
+movements:[],
+updatedAt:null
+};
+
 }
 
-function showReset(){
-$("loginScreen").style.display="none";
-$("resetScreen").style.display="flex";
-$("app").style.display="none";
-recoveryMode=true;
-}
-
-function showApp(){
-$("loginScreen").style.display="none";
-$("resetScreen").style.display="none";
-$("app").style.display="block";
-render();
-}
-
-$("loginForm").addEventListener("submit",async e=>{
-e.preventDefault();
-$("loginError").textContent="Logging in...";
-const {error}=await auth.auth.signInWithPassword({
-email:$("loginEmail").value.trim(),
-password:$("loginPassword").value
-});
-if(error){$("loginError").textContent=error.message;return}
-$("loginError").textContent="";
-});
-
-async function forgotPassword(){
-const email=$("loginEmail").value.trim();
-if(!email){$("loginError").textContent="Please enter your email address first.";return}
-$("loginError").textContent="Sending password reset email...";
-try{
-const {error}=await auth.auth.resetPasswordForEmail(email,{redirectTo:"https://accountsdod.in/"});
-if(error){$("loginError").textContent="Error: "+error.message;return}
-$("loginError").textContent="Password reset email sent. Check Gmail and Spam.";
-}catch(e){$("loginError").textContent="Error: "+e.message}
-}
-
-$("resetForm").addEventListener("submit",async e=>{
-e.preventDefault();
-$("resetError").textContent="";
-$("resetSuccess").textContent="";
-const p=$("newPassword").value;
-const c=$("confirmPassword").value;
-if(p.length<6){$("resetError").textContent="Password must be at least 6 characters.";return}
-if(p!==c){$("resetError").textContent="Passwords do not match.";return}
-const {error}=await auth.auth.updateUser({password:p});
-if(error){$("resetError").textContent=error.message;return}
-$("resetSuccess").textContent="Password updated successfully.";
-setTimeout(async()=>{await auth.auth.signOut();showLogin()},1500);
-});
-
-/* LOGOUT FIX */
-async function logout(){
-
-/* Show login screen immediately */
-showLogin();
-
-/* Clear password field */
-$("loginPassword").value="";
-
-/* Sign out from Supabase */
-try{
-await auth.auth.signOut();
-}catch(e){
-console.error("Logout error:",e);
-}
-}
-
-$("logoutBtn").addEventListener("click",logout);
-
-auth.auth.onAuthStateChange((event,session)=>{
-if(event==="PASSWORD_RECOVERY"){showReset();return}
-if(recoveryMode)return;
-if(session)showApp();else showLogin();
-});
-
-(async()=>{
-const {data}=await auth.auth.getSession();
-if(location.hash.includes("type=recovery"))showReset();
-else if(data.session)showApp();
-else showLogin();
-})();
-
-function freshData(){return{items:[],movements:[],updatedAt:null}}
-
-async function selectFolder(){
-if(!window.showDirectoryPicker){
-alert("Please open Accounts Dod on Chrome or Edge on Windows.");
-return;
-}
-try{
-dir=await window.showDirectoryPicker({mode:"readwrite"});
-await loadFromFolder();
-}catch(e){
-if(e.name!=="AbortError")alert("Folder error: "+e.message);
-}
-}
-
-async function getFile(name,create=false){
-if(!dir)throw new Error("Please select a data folder first.");
-return dir.getFileHandle(name,{create});
-}
-
-async function loadFromFolder(){
-try{
-const fh=await getFile("stock-data.json",false);
-const f=await fh.getFile();
-db=JSON.parse(await f.text());
-if(!db.items)db.items=[];
-if(!db.movements)db.movements=[];
-db.items.forEach(normalizeItem);
-$("status").textContent="Connected • "+db.items.length+" items • "+new Date(db.updatedAt||Date.now()).toLocaleString();
-}catch(e){
-db=freshData();
-await saveNow();
-$("status").textContent="New stock-data.json created";
-}
-render();
-}
 
 function normalizeItem(item){
+
 if(!Array.isArray(item.locations)){
-let oldQty=Number(item.qty||0);
-item.locations=oldQty>0?[{id:crypto.randomUUID(),location:"Main Stock",rack:"",bin:"",qty:oldQty}]:[];
+
+const oldQty =
+Number(item.qty || 0);
+
+item.locations =
+oldQty > 0
+?
+[
+{
+id:crypto.randomUUID(),
+location:"Main Stock",
+rack:"",
+bin:"",
+qty:oldQty
 }
-item.locations.forEach(loc=>{
-if(!loc.id)loc.id=crypto.randomUUID();
-loc.location=loc.location||"Main Stock";
-loc.rack=loc.rack||"";
-loc.bin=loc.bin||"";
-loc.qty=Number(loc.qty||0);
-});
+]
+:
+[];
+
+}
+
+item.locations =
+item.locations.map(
+l => ({
+
+id:
+l.id ||
+crypto.randomUUID(),
+
+location:
+l.location ||
+"Main Stock",
+
+rack:
+l.rack ||
+"",
+
+bin:
+l.bin ||
+"",
+
+qty:
+Number(l.qty || 0)
+
+})
+);
+
 syncItemQty(item);
+
+return item;
+
 }
+
 
 function syncItemQty(item){
-item.qty=item.locations.reduce((s,l)=>s+Number(l.qty||0),0);
+
+item.qty =
+item.locations.reduce(
+(total,location) =>
+total +
+Number(location.qty || 0),
+0
+);
+
 }
 
-async function writeJson(name,data){
-const fh=await getFile(name,true);
-const w=await fh.createWritable();
-await w.write(JSON.stringify(data,null,2));
-await w.close();
+
+function normalizeDB(data){
+
+if(
+!data ||
+typeof data !== "object"
+){
+
+return freshData();
+
 }
+
+if(!Array.isArray(data.items)){
+data.items=[];
+}
+
+if(!Array.isArray(data.movements)){
+data.movements=[];
+}
+
+data.items.forEach(
+normalizeItem
+);
+
+return data;
+
+}
+
+
+/* =========================
+   BROWSER STORAGE
+========================= */
+
+function saveBrowser(){
+
+try{
+
+localStorage.setItem(
+STORAGE_KEY,
+JSON.stringify(db)
+);
+
+return true;
+
+}catch(error){
+
+console.error(
+"Browser save error:",
+error
+);
+
+return false;
+
+}
+
+}
+
+
+function loadBrowser(){
+
+try{
+
+const raw =
+localStorage.getItem(
+STORAGE_KEY
+);
+
+if(raw){
+
+db =
+normalizeDB(
+JSON.parse(raw)
+);
+
+return true;
+
+}
+
+}catch(error){
+
+console.error(
+"Browser load error:",
+error
+);
+
+}
+
+db =
+freshData();
+
+return false;
+
+}
+
+
+/* =========================
+   LOGIN SCREENS
+========================= */
+
+function showLogin(){
+
+$("loginScreen").style.display =
+"flex";
+
+$("resetScreen").style.display =
+"none";
+
+$("app").style.display =
+"none";
+
+recoveryMode=false;
+
+}
+
+
+function showReset(){
+
+$("loginScreen").style.display =
+"none";
+
+$("resetScreen").style.display =
+"flex";
+
+$("app").style.display =
+"none";
+
+recoveryMode=true;
+
+}
+
+
+function showApp(){
+
+$("loginScreen").style.display =
+"none";
+
+$("resetScreen").style.display =
+"none";
+
+$("app").style.display =
+"block";
+
+render();
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+$("loginForm").addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+$("loginError").textContent =
+"Logging in...";
+
+const email =
+$("loginEmail").value.trim();
+
+const password =
+$("loginPassword").value;
+
+const result =
+await auth.auth.signInWithPassword({
+
+email:email,
+
+password:password
+
+});
+
+if(result.error){
+
+$("loginError").textContent =
+result.error.message;
+
+return;
+
+}
+
+$("loginError").textContent="";
+
+}
+);
+
+
+/* =========================
+   FORGOT PASSWORD
+========================= */
+
+async function forgotPassword(){
+
+const email =
+$("loginEmail").value.trim();
+
+if(!email){
+
+$("loginError").textContent =
+"Please enter your email address first.";
+
+return;
+
+}
+
+$("loginError").textContent =
+"Sending password reset email...";
+
+try{
+
+const result =
+await auth.auth.resetPasswordForEmail(
+email,
+{
+redirectTo:
+"https://accountsdod.in/"
+}
+);
+
+if(result.error){
+
+throw result.error;
+
+}
+
+$("loginError").textContent =
+"Password reset email sent. Check Gmail and Spam.";
+
+}catch(error){
+
+$("loginError").textContent =
+"Error: " +
+error.message;
+
+}
+
+}
+
+
+/* =========================
+   PASSWORD RESET
+========================= */
+
+$("resetForm").addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+$("resetError").textContent="";
+$("resetSuccess").textContent="";
+
+const password =
+$("newPassword").value;
+
+const confirm =
+$("confirmPassword").value;
+
+if(password.length < 6){
+
+$("resetError").textContent =
+"Password must be at least 6 characters.";
+
+return;
+
+}
+
+if(password !== confirm){
+
+$("resetError").textContent =
+"Passwords do not match.";
+
+return;
+
+}
+
+const result =
+await auth.auth.updateUser({
+password:password
+});
+
+if(result.error){
+
+$("resetError").textContent =
+result.error.message;
+
+return;
+
+}
+
+$("resetSuccess").textContent =
+"Password updated successfully.";
+
+setTimeout(
+async function(){
+
+try{
+
+await auth.auth.signOut();
+
+}catch(error){}
+
+showLogin();
+
+},
+1200
+);
+
+}
+);
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+$("logoutBtn").addEventListener(
+"click",
+async function(){
+
+showLogin();
+
+$("loginPassword").value="";
+
+try{
+
+await auth.auth.signOut();
+
+}catch(error){
+
+console.error(
+"Logout error:",
+error
+);
+
+}
+
+}
+);
+
+
+/* =========================
+   AUTH STATE
+========================= */
+
+auth.auth.onAuthStateChange(
+function(event,session){
+
+if(
+event === "PASSWORD_RECOVERY"
+){
+
+showReset();
+
+return;
+
+}
+
+if(recoveryMode){
+
+return;
+
+}
+
+if(session){
+
+showApp();
+
+}else{
+
+showLogin();
+
+}
+
+}
+);
+
+
+/* =========================
+   START APP
+========================= */
+
+async function startApp(){
+
+/*
+IMPORTANT:
+Load browser data BEFORE checking
+the Supabase login.
+This prevents refresh from
+starting with an empty database.
+*/
+
+loadBrowser();
+
+render();
+
+try{
+
+const result =
+await auth.auth.getSession();
+
+const session =
+result.data.session;
+
+if(
+location.hash.includes(
+"type=recovery"
+)
+){
+
+showReset();
+
+}else if(session){
+
+showApp();
+
+}else{
+
+showLogin();
+
+}
+
+}catch(error){
+
+showLogin();
+
+}
+
+}
+
+startApp();
+
+
+/* =========================
+   LOCATION ROW
+========================= */
+
+function addLocationRow(
+containerId,
+location="",
+rack="",
+bin="",
+qty="0"
+){
+
+const container =
+$(containerId);
+
+const row =
+document.createElement("div");
+
+row.className =
+"location-row";
+
+row.innerHTML = `
+
+<input
+class="loc-name"
+placeholder="Location"
+value="${escapeAttr(location)}"
+>
+
+<input
+class="loc-rack"
+placeholder="Rack"
+value="${escapeAttr(rack)}"
+>
+
+<input
+class="loc-bin"
+placeholder="Bin / Shelf"
+value="${escapeAttr(bin)}"
+>
+
+<input
+class="loc-qty"
+type="number"
+min="0"
+step="0.01"
+placeholder="Qty"
+value="${qty}"
+>
+
+<button
+type="button"
+class="danger"
+>
+✕
+</button>
+
+`;
+
+row.querySelector(
+"button"
+).onclick =
+() =>
+row.remove();
+
+container.appendChild(row);
+
+}
+
+
+function readLocationRows(
+containerId
+){
+
+return [
+...
+$(containerId)
+.querySelectorAll(
+".location-row"
+)
+].map(
+row => ({
+
+id:
+crypto.randomUUID(),
+
+location:
+row.querySelector(
+".loc-name"
+).value.trim()
+||
+"Main Stock",
+
+rack:
+row.querySelector(
+".loc-rack"
+).value.trim(),
+
+bin:
+row.querySelector(
+".loc-bin"
+).value.trim(),
+
+qty:
+Number(
+row.querySelector(
+".loc-qty"
+).value || 0
+)
+
+})
+);
+
+}
+
+
+function locationLabel(location){
+
+return (
+location.location
++
+(
+location.rack
+?
+" → " +
+location.rack
+:
+""
+)
++
+(
+location.bin
+?
+" → " +
+location.bin
+:
+""
+)
+);
+
+
+/* =========================
+   FILE STORAGE
+========================= */
+
+async function selectFolder(){
+
+if(
+!window.showDirectoryPicker
+){
+
+alert(
+"Please open Accounts Dod on Chrome or Edge on Windows to select a folder."
+);
+
+return;
+
+}
+
+try{
+
+dir =
+await window.showDirectoryPicker(
+{
+mode:"readwrite"
+}
+);
+
+await loadFromFolder();
+
+}catch(error){
+
+if(
+error.name !== "AbortError"
+){
+
+alert(
+"Folder error: " +
+error.message
+);
+
+}
+
+}
+
+}
+
+
+async function getFile(
+name,
+create=false
+){
+
+if(!dir){
+
+throw new Error(
+"Please select a data folder first."
+);
+
+}
+
+return dir.getFileHandle(
+name,
+{
+create:create
+}
+);
+
+}
+
+
+async function loadFromFolder(){
+
+try{
+
+const fileHandle =
+await getFile(
+"stock-data.json",
+false
+);
+
+const file =
+await fileHandle.getFile();
+
+const text =
+await file.text();
+
+if(!text.trim()){
+
+throw new Error(
+"Empty stock file"
+);
+
+}
+
+const fileDB =
+normalizeDB(
+JSON.parse(text)
+);
+
+db =
+fileDB;
+
+saveBrowser();
+
+$("status").textContent =
+"Connected • " +
+db.items.length +
+" items • " +
+new Date(
+db.updatedAt ||
+Date.now()
+).toLocaleString();
+
+}catch(error){
+
+/*
+NEVER replace existing browser
+data with an empty database.
+*/
+
+loadBrowser();
+
+if(
+db.items.length ||
+db.movements.length
+){
+
+try{
+
+await writeJson(
+"stock-data.json",
+db
+);
+
+$("status").textContent =
+"Connected • Browser data saved to stock-data.json";
+
+}catch(saveError){
+
+$("status").textContent =
+"Browser data loaded • Folder save failed";
+
+}
+
+}else{
+
+db =
+freshData();
+
+await writeJson(
+"stock-data.json",
+db
+);
+
+saveBrowser();
+
+$("status").textContent =
+"New stock-data.json created";
+
+}
+
+}
+
+render();
+
+}
+
+
+async function writeJson(
+name,
+data
+){
+
+const fileHandle =
+await getFile(
+name,
+true
+);
+
+const writable =
+await fileHandle.createWritable();
+
+await writable.write(
+JSON.stringify(
+data,
+null,
+2
+)
+);
+
+await writable.close();
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
 
 async function saveNow(){
-db.updatedAt=now();
-if(dir){
+
+if(saving){
+
+return;
+
+}
+
+saving=true;
+
+db.updatedAt =
+now();
+
+/*
+Always save locally first.
+This is what makes refresh safe.
+*/
+
+saveBrowser();
+
 try{
-await writeJson("stock-data.json",db);
-$("status").textContent="Saved • "+new Date().toLocaleString();
-}catch(e){$("status").textContent="Save error: "+e.message}
+
+if(dir){
+
+await writeJson(
+"stock-data.json",
+db
+);
+
+$("status").textContent =
+"Saved • " +
+new Date().toLocaleString();
+
 }else{
-localStorage.setItem("accountsDodStock",JSON.stringify(db));
-$("status").textContent="Browser storage • Select a data folder for file storage.";
+
+$("status").textContent =
+"Saved in browser • Select a data folder for file syncing";
+
 }
+
+}catch(error){
+
+$("status").textContent =
+"Browser saved • Folder save error: " +
+error.message;
+
+}
+
 renderStats();
+
+saving=false;
+
 }
+
+
+/* =========================
+   BACKUP
+========================= */
 
 async function backupNow(){
-if(!dir){downloadBackup();return}
-try{
-const stamp=new Date().toISOString().replace(/[:.]/g,"-");
-await writeJson("backup-"+stamp+".json",db);
-alert("Backup created successfully.");
-}catch(e){alert("Backup failed: "+e.message)}
+
+if(!dir){
+
+downloadBackup();
+
+return;
+
 }
+
+try{
+
+await writeJson(
+"backup-" +
+new Date()
+.toISOString()
+.replace(/[:.]/g,"-") +
+".json",
+db
+);
+
+alert(
+"Backup created successfully."
+);
+
+}catch(error){
+
+alert(
+"Backup failed: " +
+error.message
+);
+
+}
+
+}
+
 
 function downloadBackup(){
-const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
-const a=document.createElement("a");
-a.href=URL.createObjectURL(blob);
-a.download="accounts-dod-stock-backup-"+new Date().toISOString().slice(0,10)+".json";
-a.click();
-URL.revokeObjectURL(a.href);
+
+const blob =
+new Blob(
+[
+JSON.stringify(
+db,
+null,
+2
+)
+],
+{
+type:"application/json"
 }
+);
+
+const link =
+document.createElement("a");
+
+link.href =
+URL.createObjectURL(blob);
+
+link.download =
+"accounts-dod-stock-backup-" +
+new Date()
+.toISOString()
+.slice(0,10) +
+".json";
+
+link.click();
+
+setTimeout(
+function(){
+
+URL.revokeObjectURL(
+link.href
+);
+
+},
+1000
+);
+
+}
+
+
+/* =========================
+   RESTORE
+========================= */
 
 function restoreBackup(){
-const input=document.createElement("input");
+
+const input =
+document.createElement("input");
+
 input.type="file";
+
 input.accept=".json";
-input.onchange=async()=>{
-const file=input.files[0];
-if(!file)return;
-try{
-const restored=JSON.parse(await file.text());
-if(!Array.isArray(restored.items)||!Array.isArray(restored.movements))throw new Error("Invalid backup file.");
-restored.items.forEach(normalizeItem);
-db=restored;
-await saveNow();
-render();
-alert("Backup restored successfully.");
-}catch(e){alert("Restore failed: "+e.message)}
-};
-input.click();
-}
-function addLocationRow(containerId,location="",rack="",bin="",qty="0"){
-const container=$(containerId);
-const row=document.createElement("div");
-row.className="location-row";
-row.innerHTML=`
-<input class="loc-name" placeholder="Location e.g. Main Godown" value="${escapeAttr(location)}">
-<input class="loc-rack" placeholder="Rack e.g. A2" value="${escapeAttr(rack)}">
-<input class="loc-bin" placeholder="Bin/Shelf" value="${escapeAttr(bin)}">
-<input class="loc-qty" type="number" min="0" step="0.01" placeholder="Qty" value="${qty}">
-<button type="button" class="danger">✕</button>`;
-row.querySelector("button").onclick=()=>row.remove();
-container.appendChild(row);
+
+input.onchange =
+async function(){
+
+const file =
+input.files[0];
+
+if(!file){
+
+return;
+
 }
 
-function readLocationRows(containerId){
-return [...$(containerId).querySelectorAll(".location-row")].map(row=>({
-id:crypto.randomUUID(),
-location:row.querySelector(".loc-name").value.trim()||"Main Stock",
-rack:row.querySelector(".loc-rack").value.trim(),
-bin:row.querySelector(".loc-bin").value.trim(),
-qty:Number(row.querySelector(".loc-qty").value||0)
-})).filter(x=>x.qty>0);
+try{
+
+const restored =
+normalizeDB(
+JSON.parse(
+await file.text()
+)
+);
+
+db =
+restored;
+
+await saveNow();
+
+render();
+
+alert(
+"Backup restored successfully."
+);
+
+}catch(error){
+
+alert(
+"Restore failed: " +
+error.message
+);
+
 }
+
+};
+
+input.click();
+
+}
+
+
+/* =========================
+   ADD ITEM
+========================= */
 
 function openAdd(){
-$("dialogTitle").textContent="Add Item";
+
+$("dialogTitle").textContent =
+"Add Item";
+
 $("itemId").value="";
+
 $("itemName").value="";
+
 $("itemRate").value="";
+
 $("initialLocations").innerHTML="";
-addLocationRow("initialLocations","","","",0);
+
+addLocationRow(
+"initialLocations",
+"Main Stock",
+"",
+"",
+0
+);
+
 $("itemError").textContent="";
+
 $("itemDialog").showModal();
+
 }
+
+
+/* =========================
+   EDIT ITEM
+========================= */
 
 function openEdit(id){
-const item=db.items.find(x=>x.id===id);
-if(!item)return;
-normalizeItem(item);
-$("dialogTitle").textContent="Edit Item";
-$("itemId").value=item.id;
-$("itemName").value=item.name;
-$("itemRate").value=item.rate;
-$("initialLocations").innerHTML="";
-if(item.locations.length){
-item.locations.forEach(l=>addLocationRow("initialLocations",l.location,l.rack,l.bin,l.qty));
-}else addLocationRow("initialLocations","","","",0);
-$("itemError").textContent="";
-$("itemDialog").showModal();
+
+const item =
+db.items.find(
+x =>
+x.id === id
+);
+
+if(!item){
+
+return;
+
 }
 
-$("itemForm").addEventListener("submit",async e=>{
-e.preventDefault();
-const id=$("itemId").value;
-const name=$("itemName").value.trim();
-const rate=Number($("itemRate").value);
-const locations=readLocationRows("initialLocations");
+normalizeItem(item);
 
-if(!name||rate<0){
-$("itemError").textContent="Please enter valid item details.";
+$("dialogTitle").textContent =
+"Edit Item";
+
+$("itemId").value =
+item.id;
+
+$("itemName").value =
+item.name;
+
+$("itemRate").value =
+item.rate;
+
+$("initialLocations").innerHTML="";
+
+item.locations.forEach(
+location =>
+addLocationRow(
+"initialLocations",
+location.location,
+location.rack,
+location.bin,
+location.qty
+)
+);
+
+if(
+!item.locations.length
+){
+
+addLocationRow(
+"initialLocations",
+"Main Stock",
+"",
+"",
+0
+);
+
+}
+
+$("itemError").textContent="";
+
+$("itemDialog").showModal();
+
+}
+
+
+/* =========================
+   SAVE ITEM
+========================= */
+
+$("itemForm").addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+const id =
+$("itemId").value;
+
+const name =
+$("itemName").value.trim();
+
+const rate =
+Number(
+$("itemRate").value
+);
+
+const locations =
+readLocationRows(
+"initialLocations"
+);
+
+if(
+!name ||
+rate < 0
+){
+
+$("itemError").textContent =
+"Please enter valid item details.";
+
 return;
+
 }
 
 if(id){
-const item=db.items.find(x=>x.id===id);
+
+const item =
+db.items.find(
+x =>
+x.id === id
+);
+
 if(item){
-item.name=name;
-item.rate=rate;
-item.locations=locations;
+
+item.name =
+name;
+
+item.rate =
+rate;
+
+item.locations =
+locations;
+
 syncItemQty(item);
-item.updatedAt=now();
+
+item.updatedAt =
+now();
+
 }
+
 }else{
-const duplicate=db.items.find(x=>x.name.toLowerCase().trim()===name.toLowerCase().trim());
+
+const duplicate =
+db.items.some(
+x =>
+x.name
+.toLowerCase()
+.trim()
+===
+name
+.toLowerCase()
+.trim()
+);
+
 if(duplicate){
-$("itemError").textContent="This item already exists.";
+
+$("itemError").textContent =
+"This item already exists.";
+
 return;
+
 }
+
 db.items.push({
-id:crypto.randomUUID(),
+
+id:
+crypto.randomUUID(),
+
+name:
 name,
+
+rate:
 rate,
-qty:0,
+
+qty:
+0,
+
+locations:
 locations,
-createdAt:now(),
-updatedAt:now()
+
+createdAt:
+now(),
+
+updatedAt:
+now()
+
 });
+
 }
+
 $("itemDialog").close();
+
 await saveNow();
+
 render();
-});
 
-function locationLabel(l){
-return l.location+(l.rack?" → "+l.rack:"")+(l.bin?" → "+l.bin:"");
+}
+);
+
+
+/* =========================
+   STOCK MOVEMENT
+========================= */
+
+function openStock(
+id,
+mode
+){
+
+const item =
+db.items.find(
+x =>
+x.id === id
+);
+
+if(!item){
+
+return;
+
 }
 
-function openStock(id,mode){
-const item=db.items.find(x=>x.id===id);
-if(!item)return;
 normalizeItem(item);
 
-$("stockId").value=id;
-$("stockMode").value=mode;
-$("stockTitle").textContent=mode==="add"?"➕ Add Stock":"➖ Less Stock";
-$("stockInfo").innerHTML="<b>"+escapeHtml(item.name)+"</b><br><span class='muted'>Total stock: "+item.qty+"</span>";
+$("stockId").value =
+id;
 
-const select=$("stockLocation");
+$("stockMode").value =
+mode;
+
+$("stockTitle").textContent =
+mode === "add"
+?
+"➕ Add Stock"
+:
+"➖ Less Stock";
+
+$("stockInfo").innerHTML =
+"<b>" +
+escapeHtml(item.name) +
+"</b><br>" +
+"<span class='muted'>" +
+"Total stock: " +
+item.qty +
+"</span>";
+
+const select =
+$("stockLocation");
+
 select.innerHTML="";
-if(mode==="add"){
-item.locations.forEach(l=>{
-const o=document.createElement("option");
-o.value=l.id;o.textContent=locationLabel(l)+" • "+l.qty;
-select.appendChild(o);
-});
-const newO=document.createElement("option");
-newO.value="__new__";newO.textContent="＋ New Location";
-select.appendChild(newO);
-}else{
-item.locations.filter(l=>l.qty>0).forEach(l=>{
-const o=document.createElement("option");
-o.value=l.id;o.textContent=locationLabel(l)+" • "+l.qty;
-select.appendChild(o);
-});
+
+item.locations.forEach(
+location => {
+
+const option =
+document.createElement(
+"option"
+);
+
+option.value =
+location.id;
+
+option.textContent =
+locationLabel(location) +
+" • Qty: " +
+location.qty;
+
+select.appendChild(option);
+
 }
-if(!select.options.length){
-const o=document.createElement("option");
-o.value="__new__";o.textContent="＋ New Location";
-select.appendChild(o);
-}
-$("stockQty").value="";
-$("stockNote").value="";
-$("stockError").textContent="";
-$("stockDialog").showModal();
+);
+
+if(
+mode === "add"
+){
+
+const option =
+document.createElement(
+"option"
+);
+
+option.value =
+"__new__";
+
+option.textContent =
+"＋ New Location";
+
+select.appendChild(option);
+
 }
 
-$("stockForm").addEventListener("submit",async e=>{
+$("stockQty").value="";
+
+$("stockNote").value="";
+
+$("stockError").textContent="";
+
+$("stockDialog").showModal();
+
+}
+
+
+/* =========================
+   SAVE STOCK
+========================= */
+
+$("stockForm").addEventListener(
+"submit",
+async function(e){
+
 e.preventDefault();
-const item=db.items.find(x=>x.id===$("stockId").value);
-const mode=$("stockMode").value;
-if(!item)return;
+
+const item =
+db.items.find(
+x =>
+x.id ===
+$("stockId").value
+);
+
+if(!item){
+
+return;
+
+}
+
 normalizeItem(item);
 
-let locationId=$("stockLocation").value;
-let loc=item.locations.find(l=>l.id===locationId);
+const mode =
+$("stockMode").value;
 
-if(mode==="add"&&locationId==="__new__"){
-const name=prompt("Enter location name:");
-if(!name||!name.trim())return;
-const rack=prompt("Rack (optional):")||"";
-const bin=prompt("Bin/Shelf (optional):")||"";
-loc={id:crypto.randomUUID(),location:name.trim(),rack:rack.trim(),bin:bin.trim(),qty:0};
-item.locations.push(loc);
-}
+const quantity =
+Number(
+$("stockQty").value
+);
 
-if(!loc){
-$("stockError").textContent="Please select a valid location.";
+const locationId =
+$("stockLocation").value;
+
+if(
+!quantity ||
+quantity <= 0
+){
+
+$("stockError").textContent =
+"Enter a quantity greater than zero.";
+
 return;
+
 }
 
-const q=Number($("stockQty").value);
-if(!q||q<=0){
-$("stockError").textContent="Enter a quantity greater than zero.";
+let location =
+item.locations.find(
+x =>
+x.id === locationId
+);
+
+if(
+mode === "add" &&
+locationId === "__new__"
+){
+
+const name =
+prompt(
+"Enter location name:"
+);
+
+if(
+!name ||
+!name.trim()
+){
+
 return;
+
 }
 
-if(mode==="less"&&q>loc.qty){
-$("stockError").textContent="Not enough stock at this location. Available: "+loc.qty;
+const rack =
+prompt(
+"Rack (optional):"
+)
+||
+"";
+
+const bin =
+prompt(
+"Bin/Shelf (optional):"
+)
+||
+"";
+
+location = {
+
+id:
+crypto.randomUUID(),
+
+location:
+name.trim(),
+
+rack:
+rack.trim(),
+
+bin:
+bin.trim(),
+
+qty:
+0
+
+};
+
+item.locations.push(
+location
+);
+
+}
+
+if(!location){
+
+$("stockError").textContent =
+"Please select a valid location.";
+
 return;
+
 }
 
-loc.qty=mode==="add"?loc.qty+q:loc.qty-q;
+if(
+mode === "less" &&
+quantity >
+location.qty
+){
+
+$("stockError").textContent =
+"Not enough stock at this location. Available: " +
+location.qty;
+
+return;
+
+}
+
+if(
+mode === "add"
+){
+
+location.qty +=
+quantity;
+
+}else{
+
+location.qty -=
+quantity;
+
+}
+
 syncItemQty(item);
-item.updatedAt=now();
+
+item.updatedAt =
+now();
 
 db.movements.unshift({
-id:crypto.randomUUID(),
-itemId:item.id,
-itemName:item.name,
+
+id:
+crypto.randomUUID(),
+
+itemId:
+item.id,
+
+itemName:
+item.name,
+
+mode:
 mode,
-qty:q,
-location:locationLabel(loc),
-note:$("stockNote").value.trim(),
-time:now(),
-balance:loc.qty,
-totalBalance:item.qty
+
+qty:
+quantity,
+
+location:
+locationLabel(location),
+
+note:
+$("stockNote").value.trim(),
+
+time:
+now(),
+
+balance:
+location.qty,
+
+totalBalance:
+item.qty
+
 });
 
 $("stockDialog").close();
+
 await saveNow();
+
 render();
-});
+
+}
+);
+
+
+/* =========================
+   TRANSFER
+========================= */
 
 function openTransfer(id){
-const item=db.items.find(x=>x.id===id);
-if(!item)return;
+
+const item =
+db.items.find(
+x =>
+x.id === id
+);
+
+if(!item){
+
+return;
+
+}
+
 normalizeItem(item);
 
-$("transferId").value=id;
+if(
+item.locations.length < 2
+){
+
+alert(
+"Add at least two locations before transferring stock."
+);
+
+return;
+
+}
+
+$("transferId").value =
+id;
+
 $("transferFrom").innerHTML="";
+
 $("transferTo").innerHTML="";
 
-item.locations.filter(l=>l.qty>0).forEach(l=>{
-const a=document.createElement("option");
-a.value=l.id;a.textContent=locationLabel(l)+" • "+l.qty;
-$("transferFrom").appendChild(a);
-});
+item.locations
+.filter(
+l =>
+l.qty > 0
+)
+.forEach(
+location => {
 
-item.locations.forEach(l=>{
-const b=document.createElement("option");
-b.value=l.id;b.textContent=locationLabel(l);
-$("transferTo").appendChild(b);
-});
+const option =
+document.createElement(
+"option"
+);
+
+option.value =
+location.id;
+
+option.textContent =
+locationLabel(location) +
+" • Qty: " +
+location.qty;
+
+$("transferFrom")
+.appendChild(
+option
+);
+
+}
+);
+
+item.locations.forEach(
+location => {
+
+const option =
+document.createElement(
+"option"
+);
+
+option.value =
+location.id;
+
+option.textContent =
+locationLabel(location);
+
+$("transferTo")
+.appendChild(
+option
+);
+
+}
+);
 
 $("transferQty").value="";
+
+$("transferNote").value="";
+
 $("transferError").textContent="";
+
 $("transferDialog").showModal();
+
 }
 
-$("transferForm").addEventListener("submit",async e=>{
+
+/* =========================
+   SAVE TRANSFER
+========================= */
+
+$("transferForm").addEventListener(
+"submit",
+async function(e){
+
 e.preventDefault();
-const item=db.items.find(x=>x.id===$("transferId").value);
-if(!item)return;
+
+const item =
+db.items.find(
+x =>
+x.id ===
+$("transferId").value
+);
+
+if(!item){
+
+return;
+
+}
+
 normalizeItem(item);
 
-const from=item.locations.find(l=>l.id===$("transferFrom").value);
-const to=item.locations.find(l=>l.id===$("transferTo").value);
-const q=Number($("transferQty").value);
+const from =
+item.locations.find(
+x =>
+x.id ===
+$("transferFrom").value
+);
 
-if(!from||!to){
-$("transferError").textContent="Select both locations.";
+const to =
+item.locations.find(
+x =>
+x.id ===
+$("transferTo").value
+);
+
+const quantity =
+Number(
+$("transferQty").value
+);
+
+if(
+!from ||
+!to
+){
+
+$("transferError").textContent =
+"Select both locations.";
+
 return;
-}
-if(from.id===to.id){
-$("transferError").textContent="From and To locations must be different.";
-return;
-}
-if(!q||q<=0){
-$("transferError").textContent="Enter a valid quantity.";
-return;
-}
-if(q>from.qty){
-$("transferError").textContent="Not enough stock at source location.";
-return;
+
 }
 
-from.qty-=q;
-to.qty+=q;
+if(
+from.id ===
+to.id
+){
+
+$("transferError").textContent =
+"From and To locations must be different.";
+
+return;
+
+}
+
+if(
+!quantity ||
+quantity <= 0
+){
+
+$("transferError").textContent =
+"Enter a valid quantity.";
+
+return;
+
+}
+
+if(
+quantity >
+from.qty
+){
+
+$("transferError").textContent =
+"Not enough stock at source location.";
+
+return;
+
+}
+
+from.qty -=
+quantity;
+
+to.qty +=
+quantity;
+
 syncItemQty(item);
-item.updatedAt=now();
+
+item.updatedAt =
+now();
 
 db.movements.unshift({
-id:crypto.randomUUID(),
-itemId:item.id,
-itemName:item.name,
-mode:"transfer",
-qty:q,
-location:locationLabel(from)+" → "+locationLabel(to),
-note:"Stock transfer",
-time:now(),
-balance:to.qty,
-totalBalance:item.qty
+
+id:
+crypto.randomUUID(),
+
+itemId:
+item.id,
+
+itemName:
+item.name,
+
+mode:
+"transfer",
+
+qty:
+quantity,
+
+location:
+locationLabel(from) +
+" → " +
+locationLabel(to),
+
+note:
+$("transferNote").value.trim(),
+
+time:
+now(),
+
+balance:
+to.qty,
+
+totalBalance:
+item.qty
+
 });
 
 $("transferDialog").close();
+
 await saveNow();
+
 render();
-});
-async function deleteItem(id){
-const item=db.items.find(x=>x.id===id);
-if(!item)return;
-if(!confirm("Delete "+item.name+"?"))return;
-db.items=db.items.filter(x=>x.id!==id);
-await saveNow();
-render();
+
 }
+);
+
+
+/* =========================
+   DELETE
+========================= */
+
+async function deleteItem(id){
+
+const item =
+db.items.find(
+x =>
+x.id === id
+);
+
+if(!item){
+
+return;
+
+}
+
+if(
+!confirm(
+"Delete " +
+item.name +
+"?"
+)
+){
+
+return;
+
+}
+
+db.items =
+db.items.filter(
+x =>
+x.id !== id
+);
+
+await saveNow();
+
+render();
+
+}
+
+
+/* =========================
+   LOCATION FILTER
+========================= */
 
 function renderLocationFilter(){
-const select=$("locationFilter");
-const current=select.value;
+
+const select =
+$("locationFilter");
+
+const current =
+select.value;
+
 const names=[];
-db.items.forEach(item=>{
+
+db.items.forEach(
+item => {
+
 normalizeItem(item);
-item.locations.forEach(l=>{
-const n=locationLabel(l);
-if(!names.includes(n))names.push(n);
-});
-});
-names.sort();
-select.innerHTML="<option value=''>📍 All Locations</option>";
-names.forEach(n=>{
-const o=document.createElement("option");
-o.value=n;o.textContent="📍 "+n;
-select.appendChild(o);
-});
-if(names.includes(current))select.value=current;
+
+item.locations.forEach(
+location => {
+
+const name =
+location.location;
+
+if(
+name &&
+!names.includes(name)
+){
+
+names.push(name);
+
 }
+
+}
+);
+
+}
+);
+
+names.sort();
+
+select.innerHTML =
+"<option value=''>" +
+"📍 All Locations" +
+"</option>";
+
+names.forEach(
+name => {
+
+const option =
+document.createElement(
+"option"
+);
+
+option.value =
+name;
+
+option.textContent =
+"📍 " +
+name;
+
+select.appendChild(
+option
+);
+
+}
+);
+
+if(
+names.includes(current)
+){
+
+select.value =
+current;
+
+}
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
 
 function render(){
+
 renderLocationFilter();
 
-const q=$("search").value.trim().toLowerCase();
-const locFilter=$("locationFilter").value;
+const search =
+$("search")
+.value
+.trim()
+.toLowerCase();
 
-const list=db.items.filter(item=>{
+const selectedLocation =
+$("locationFilter")
+.value;
+
+const list =
+db.items.filter(
+item => {
+
 normalizeItem(item);
-const textMatch=item.name.toLowerCase().includes(q);
-const locMatch=!locFilter||item.locations.some(l=>locationLabel(l)===locFilter&&l.qty>0);
-return textMatch&&locMatch;
-});
 
-$("items").innerHTML=list.length?list.map(item=>{
-const locationHtml=item.locations.length?item.locations.filter(l=>l.qty>0).map(l=>`
-<div class="location-line">
-<span>📍 ${escapeHtml(locationLabel(l))}</span>
-<b>${l.qty}</b>
-</div>`).join(""):"<span class='muted'>No stock locations</span>";
+const textMatch =
+item.name
+.toLowerCase()
+.includes(search);
 
-return `
-<div class="item">
-<div class="row">
-<div>
-<b>${escapeHtml(item.name)}</b>
-<div class="muted">Rate: ${money(item.rate)} • Total Value: ${money(item.rate*item.qty)}</div>
-</div>
-<div class="qty">${item.qty}</div>
-</div>
+const locationMatch =
+!selectedLocation ||
+item.locations.some(
+location =>
+location.location ===
+selectedLocation &&
+location.qty > 0
+);
 
-<div class="location-box">
-<b>📍 Stock Locations</b>
-${locationHtml}
-</div>
+return (
+textMatch &&
+locationMatch
+);
 
-<div class="actions" style="margin-top:10px">
-<button class="green" onclick="openStock('${item.id}','add')">＋ Add Stock</button>
-<button class="red" onclick="openStock('${item.id}','less')">− Less Stock</button>
-<button onclick="openTransfer('${item.id}')">🔄 Transfer</button>
-<button onclick="openEdit('${item.id}')">✏️ Edit</button>
-<button class="danger" onclick="deleteItem('${item.id}')">🗑️ Delete</button>
-</div>
+}
+);
 
-<div class="muted" style="margin-top:8px">
-Last edited: ${item.updatedAt?new Date(item.updatedAt).toLocaleString():"-"}
-</div>
-</div>`;
-}).join(""):"<div class='card muted'>No items found.</div>";
+if(!list.length){
+
+$("items").innerHTML =
+"<div class='card muted'>" +
+"No items found." +
+"</div>";
 
 renderStats();
+
+return;
+
 }
+
+$("items").innerHTML =
+list.map(
+item => {
+
+const locations =
+item.locations.filter(
+location =>
+location.qty > 0
+);
+
+const locationHtml =
+locations.length
+?
+locations.map(
+location =>
+`
+
+<div class="location-line">
+
+<span>
+📍 ${escapeHtml(
+locationLabel(location)
+)}
+</span>
+
+<b>
+${location.qty}
+</b>
+
+</div>
+
+`
+).join("")
+:
+"<span class='muted'>No stock locations</span>";
+
+return `
+
+<div class="item">
+
+<div class="row">
+
+<div>
+
+<b>
+${escapeHtml(item.name)}
+</b>
+
+<div class="muted">
+
+Rate:
+${money(item.rate)}
+
+•
+
+Total Value:
+${money(
+item.rate *
+item.qty
+)}
+
+</div>
+
+</div>
+
+<div class="qty">
+${item.qty}
+</div>
+
+</div>
+
+
+<div class="location-box">
+
+<b>
+📍 Stock Locations
+</b>
+
+${locationHtml}
+
+</div>
+
+
+<div
+class="actions"
+style="margin-top:10px"
+>
+
+<button
+class="green"
+onclick="openStock('${item.id}','add')"
+>
+＋ Add Stock
+</button>
+
+<button
+class="red"
+onclick="openStock('${item.id}','less')"
+>
+− Less Stock
+</button>
+
+<button
+onclick="openTransfer('${item.id}')"
+>
+🔄 Transfer
+</button>
+
+<button
+onclick="openEdit('${item.id}')"
+>
+✏️ Edit
+</button>
+
+<button
+class="danger"
+onclick="deleteItem('${item.id}')"
+>
+🗑️ Delete
+</button>
+
+</div>
+
+
+<div
+class="muted"
+style="margin-top:8px"
+>
+
+Last edited:
+
+${
+item.updatedAt
+?
+new Date(
+item.updatedAt
+).toLocaleString()
+:
+"-"
+}
+
+</div>
+
+</div>
+
+`;
+
+}
+).join("");
+
+renderStats();
+
+}
+
+
+/* =========================
+   STATISTICS
+========================= */
 
 function renderStats(){
-const totalQty=db.items.reduce((s,x)=>s+Number(x.qty||0),0);
-const totalValue=db.items.reduce((s,x)=>s+Number(x.qty||0)*Number(x.rate||0),0);
-$("statItems").textContent=db.items.length;
-$("statQty").textContent=totalQty.toLocaleString("en-IN");
-$("statValue").textContent=money(totalValue);
-$("statMoves").textContent=db.movements.length;
+
+const totalQty =
+db.items.reduce(
+(total,item) =>
+total +
+Number(item.qty || 0),
+0
+);
+
+const totalValue =
+db.items.reduce(
+(total,item) =>
+total +
+(
+Number(item.qty || 0) *
+Number(item.rate || 0)
+),
+0
+);
+
+$("statItems").textContent =
+db.items.length;
+
+$("statQty").textContent =
+totalQty.toLocaleString(
+"en-IN"
+);
+
+$("statValue").textContent =
+money(totalValue);
+
+$("statMoves").textContent =
+db.movements.length;
+
 }
+
+
+/* =========================
+   HISTORY
+========================= */
 
 function showHistory(){
-const rows=db.movements.slice(0,300);
-$("historyBody").innerHTML=rows.length?`
-<div style="overflow:auto">
-<table>
-<thead><tr><th>Date</th><th>Item</th><th>Type</th><th>Qty</th><th>Location</th><th>Balance</th><th>Note</th></tr></thead>
-<tbody>
-${rows.map(m=>`
-<tr>
-<td>${new Date(m.time).toLocaleString()}</td>
-<td>${escapeHtml(m.itemName)}</td>
-<td><span class="badge">${m.mode==="add"?"ADD":m.mode==="less"?"LESS":"TRANSFER"}</span></td>
-<td>${m.qty}</td>
-<td>${escapeHtml(m.location||"")}</td>
-<td>${m.balance}</td>
-<td>${escapeHtml(m.note||"")}</td>
-</tr>`).join("")}
-</tbody>
-</table>
-</div>`:"<p class='muted'>No movements yet.</p>";
+
+const rows =
+db.movements.slice(
+0,
+300
+);
+
+if(!rows.length){
+
+$("historyBody").innerHTML =
+"<p class='muted'>" +
+"No movements yet." +
+"</p>";
+
 $("historyDialog").showModal();
+
+return;
+
 }
+
+$("historyBody").innerHTML = `
+
+<div style="overflow:auto">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+<th>Item</th>
+<th>Type</th>
+<th>Qty</th>
+<th>Location</th>
+<th>Balance</th>
+<th>Note</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+${
+rows.map(
+movement =>
+`
+
+<tr>
+
+<td>
+${new Date(
+movement.time
+).toLocaleString()}
+</td>
+
+<td>
+${escapeHtml(
+movement.itemName
+)}
+</td>
+
+<td>
+
+<span class="badge">
+
+${
+movement.mode === "add"
+?
+"ADD"
+:
+movement.mode === "less"
+?
+"LESS"
+:
+"TRANSFER"
+}
+
+</span>
+
+</td>
+
+<td>
+${movement.qty}
+</td>
+
+<td>
+${escapeHtml(
+movement.location ||
+""
+)}
+</td>
+
+<td>
+${movement.balance}
+</td>
+
+<td>
+${escapeHtml(
+movement.note ||
+""
+)}
+</td>
+
+</tr>
+
+`
+).join("")
+}
+
+</tbody>
+
+</table>
+
+</div>
+
+`;
+
+$("historyDialog").showModal();
+
+}
+
+
+/* =========================
+   SECURITY / HTML ESCAPE
+========================= */
 
 function escapeHtml(value){
-return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+
+return String(
+value ?? ""
+).replace(
+/[&<>"']/g,
+function(char){
+
+return {
+
+"&":
+"&amp;",
+
+"<":
+"&lt;",
+
+">":
+"&gt;",
+
+'"':
+"&quot;",
+
+"'":
+"&#039;"
+
+}[char];
+
 }
+);
+
+}
+
 
 function escapeAttr(value){
-return escapeHtml(value).replace(/"/g,"&quot;");
+
+return escapeHtml(
+value
+).replace(
+/"/g,
+"&quot;"
+);
+
 }
 
-window.addEventListener("beforeunload",()=>{
-try{localStorage.setItem("accountsDodStock",JSON.stringify(db))}catch(e){}
-});
 
-setInterval(()=>{
-if($("app").style.display!=="none")saveNow();
-},15*60*1000);
+/* =========================
+   SAVE BEFORE REFRESH
+========================= */
+
+window.addEventListener(
+"beforeunload",
+function(){
+
+saveBrowser();
+
+}
+);
+
+
+/* =========================
+   AUTO SAVE
+========================= */
+
+setInterval(
+function(){
+
+if(
+$("app").style.display !==
+"none"
+){
+
+saveNow();
+
+}
+
+},
+15 * 60 * 1000
+);
 
 </script>
+
 </body>
 </html>
